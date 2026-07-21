@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { supabase } from "@/integrations/supabase/client";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -77,14 +79,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Natural Treasures — Nature-inspired clothing" },
+      { name: "description", content: "Handmade, nature-inspired clothing. Quiet pieces for everyday wear." },
+      { property: "og:title", content: "Natural Treasures" },
+      { property: "og:description", content: "Handmade, nature-inspired clothing. Quiet pieces for everyday wear." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -92,6 +92,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" } as any,
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -116,11 +122,64 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") {
+        router.invalidate();
+        if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SiteLayout>
+        <Outlet />
+      </SiteLayout>
+      <Toaster position="top-center" />
     </QueryClientProvider>
+  );
+}
+
+function SiteLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="min-h-screen flex flex-col bg-background">
+      <SiteHeader />
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+function SiteHeader() {
+  return (
+    <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
+      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+        <Link to="/" className="font-serif text-xl tracking-tight text-foreground">
+          Natural Treasures
+        </Link>
+        <nav className="hidden sm:flex items-center gap-8 text-sm text-muted-foreground">
+          <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Home</Link>
+          <Link to="/designs" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Designs</Link>
+          <Link to="/contact" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Contact</Link>
+          <Link to="/auth" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Account</Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="border-t border-border/60 mt-24">
+      <div className="mx-auto max-w-6xl px-6 py-10 flex flex-col sm:flex-row gap-4 items-center justify-between text-sm text-muted-foreground">
+        <p className="font-serif text-base text-foreground">Natural Treasures</p>
+        <p>© {new Date().getFullYear()} — Grown slowly, worn gently.</p>
+        <Link to="/admin" className="hover:text-foreground transition-colors">Admin</Link>
+      </div>
+    </footer>
   );
 }
