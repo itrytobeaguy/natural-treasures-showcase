@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -159,6 +159,26 @@ function SiteLayout({ children }: { children: ReactNode }) {
 }
 
 function SiteHeader() {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const check = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { if (active) setIsAdmin(false); return; }
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (active) setIsAdmin(!!data);
+    };
+    check();
+    const { data: sub } = supabase.auth.onAuthStateChange(() => check());
+    return () => { active = false; sub.subscription.unsubscribe(); };
+  }, []);
+
   return (
     <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
       <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
@@ -170,6 +190,9 @@ function SiteHeader() {
           <Link to="/designs" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Designs</Link>
           <Link to="/contact" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Contact</Link>
           <Link to="/auth" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Account</Link>
+          {isAdmin && (
+            <Link to="/admin" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Admin</Link>
+          )}
         </nav>
       </div>
     </header>
