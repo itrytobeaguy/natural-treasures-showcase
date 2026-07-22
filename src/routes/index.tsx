@@ -52,7 +52,10 @@ function Home() {
             { t: "Small batches", d: "Every piece is made in limited quantity, by hand." },
             { t: "Made to order", d: "Order what you love and we send it directly to you." },
           ].map((f) => (
-            <div key={f.t} className="rounded-2xl border border-border bg-card p-8">
+            <div
+              key={f.t}
+              className="rounded-2xl border border-border bg-card p-8 transition-all duration-300 hover:scale-[1.03] hover:bg-accent/40 hover:border-primary/40 hover:shadow-lg"
+            >
               <h3 className="font-serif text-2xl">{f.t}</h3>
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.d}</p>
             </div>
