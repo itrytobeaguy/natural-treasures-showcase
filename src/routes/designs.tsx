@@ -61,7 +61,7 @@ function DesignsPage() {
               params={{ id: d.id }}
               className="group block"
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border relative">
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border relative transition-all duration-300 group-hover:scale-[1.03] group-hover:bg-accent/50 group-hover:border-primary/40 group-hover:shadow-lg">
                 {d.image_url ? (
                   <img
                     src={d.image_url}
