@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "sonner";
+import { DotGrid } from "@/components/DotGrid";
 
 function NotFoundComponent() {
   return (
@@ -147,9 +148,12 @@ function RootComponent() {
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <SiteHeader />
-      <main className="flex-1">{children}</main>
-      <SiteFooter />
+      <DotGrid />
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+      </div>
     </div>
   );
 }
