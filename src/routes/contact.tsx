@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Instagram } from "lucide-react";
+import { Mail } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   component: Contact,
@@ -25,9 +25,6 @@ function Contact() {
         <a href="mailto:niktapo31@gmail.com" className="flex items-center gap-3 hover:text-primary transition-colors">
           <Mail className="h-5 w-5" /> niktapo31@gmail.com
         </a>
-        <p className="flex items-center gap-3 text-muted-foreground">
-          <Instagram className="h-5 w-5" /> @naturaltreasures
-        </p>
       </div>
     </section>
   );
