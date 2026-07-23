@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Leaf, ArrowLeft } from "lucide-react";
+import { Leaf, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/designs/$id")({
   component: DesignDetail,
@@ -39,6 +39,7 @@ function DesignDetail() {
 
   const [form, setForm] = useState({ customer_name: "", customer_email: "", shipping_address: "", size: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [imgIdx, setImgIdx] = useState(0);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -76,6 +77,12 @@ function DesignDetail() {
     );
   }
 
+  const images: string[] = [
+    ...(design.image_url ? [design.image_url] : []),
+    ...((design.image_urls as string[] | null) ?? []),
+  ].filter(Boolean);
+  const current = images[imgIdx % Math.max(images.length, 1)];
+
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <Link to="/designs" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-10">
@@ -83,12 +90,55 @@ function DesignDetail() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-12">
-        <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border">
-          {design.image_url ? (
-            <img src={design.image_url} alt={design.title} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              <Leaf className="h-14 w-14 opacity-40" />
+        <div>
+          <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border group">
+            {current ? (
+              <img src={current} alt={design.title} className="w-full h-full object-cover transition-opacity duration-300" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                <Leaf className="h-14 w-14 opacity-40" />
+              </div>
+            )}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={() => setImgIdx((i) => (i - 1 + images.length) % images.length)}
+                  aria-label="Previous image"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/80 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-background transition-all"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setImgIdx((i) => (i + 1) % images.length)}
+                  aria-label="Next image"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/80 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-background transition-all"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                  {images.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setImgIdx(i)}
+                      aria-label={`Image ${i + 1}`}
+                      className={`h-1.5 rounded-full transition-all ${i === imgIdx ? "w-6 bg-primary" : "w-1.5 bg-background/80 border border-border"}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          {images.length > 1 && (
+            <div className="mt-4 grid grid-cols-5 gap-2">
+              {images.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={() => setImgIdx(i)}
+                  className={`aspect-square rounded-lg overflow-hidden border transition-all ${i === imgIdx ? "border-primary ring-2 ring-primary/30" : "border-border opacity-70 hover:opacity-100"}`}
+                >
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
           )}
         </div>
