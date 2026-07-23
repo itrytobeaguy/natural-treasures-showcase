@@ -192,11 +192,16 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
   const [editing, setEditing] = useState<any | null>(null);
 
   async function save(d: any) {
+    const extraImages: string[] = (d.image_urls_text ?? "")
+      .split("\n")
+      .map((s: string) => s.trim())
+      .filter(Boolean);
     const payload = {
       title: d.title,
       description: d.description,
       price: Number(d.price),
       image_url: d.image_url || null,
+      image_urls: extraImages,
       category: d.category,
       in_stock: d.in_stock,
       sort_order: Number(d.sort_order) || 0,
@@ -221,25 +226,41 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
   }
 
   if (editing) {
+    const editingWithText = {
+      ...editing,
+      image_urls_text:
+        editing.image_urls_text ??
+        (Array.isArray(editing.image_urls) ? editing.image_urls.join("\n") : ""),
+    };
     return (
       <div className="rounded-xl border border-border bg-card p-6 max-w-2xl">
         <h2 className="font-serif text-2xl mb-4">{editing.id ? "Edit design" : "New design"}</h2>
         <div className="space-y-3">
-          <Input label="Title" value={editing.title ?? ""} onChange={(v) => setEditing({ ...editing, title: v })} />
-          <Input label="Category" value={editing.category ?? ""} onChange={(v) => setEditing({ ...editing, category: v })} />
-          <Input label="Price" type="number" value={String(editing.price ?? 0)} onChange={(v) => setEditing({ ...editing, price: v })} />
-          <Input label="Image URL (leave blank for placeholder)" value={editing.image_url ?? ""} onChange={(v) => setEditing({ ...editing, image_url: v })} />
-          <Input label="Sort order" type="number" value={String(editing.sort_order ?? 0)} onChange={(v) => setEditing({ ...editing, sort_order: v })} />
+          <Input label="Title" value={editingWithText.title ?? ""} onChange={(v) => setEditing({ ...editingWithText, title: v })} />
+          <Input label="Category (e.g. Shirts, Hoodies)" value={editingWithText.category ?? ""} onChange={(v) => setEditing({ ...editingWithText, category: v })} />
+          <Input label="Price" type="number" value={String(editingWithText.price ?? 0)} onChange={(v) => setEditing({ ...editingWithText, price: v })} />
+          <Input label="Primary image URL (shown first)" value={editingWithText.image_url ?? ""} onChange={(v) => setEditing({ ...editingWithText, image_url: v })} />
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Additional images / mockups (one URL per line)</span>
+            <textarea
+              rows={4}
+              value={editingWithText.image_urls_text}
+              onChange={(e) => setEditing({ ...editingWithText, image_urls_text: e.target.value })}
+              placeholder={"https://…/mockup-front.jpg\nhttps://…/mockup-back.jpg"}
+              className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm font-mono"
+            />
+          </label>
+          <Input label="Sort order" type="number" value={String(editingWithText.sort_order ?? 0)} onChange={(v) => setEditing({ ...editingWithText, sort_order: v })} />
           <label className="block">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Description</span>
-            <textarea rows={3} value={editing.description ?? ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" />
+            <textarea rows={3} value={editingWithText.description ?? ""} onChange={(e) => setEditing({ ...editingWithText, description: e.target.value })} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" />
           </label>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={editing.in_stock ?? true} onChange={(e) => setEditing({ ...editing, in_stock: e.target.checked })} />
+            <input type="checkbox" checked={editingWithText.in_stock ?? true} onChange={(e) => setEditing({ ...editingWithText, in_stock: e.target.checked })} />
             In stock
           </label>
           <div className="flex gap-2 pt-3">
-            <button onClick={() => save(editing)} className="rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm">Save</button>
+            <button onClick={() => save(editingWithText)} className="rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm">Save</button>
             <button onClick={() => setEditing(null)} className="rounded-full border border-border px-5 py-2.5 text-sm">Cancel</button>
           </div>
         </div>
