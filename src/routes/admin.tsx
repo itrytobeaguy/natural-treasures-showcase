@@ -332,3 +332,45 @@ function Input({ label, value, onChange, type = "text" }: { label: string; value
     </label>
   );
 }
+
+const PRESET_CATEGORIES = ["T-Shirts", "Sweatshirts/Hoodies", "Shorts", "Pants"];
+
+function CategoryInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <label className="block">
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">Category</span>
+      <div className="mt-1 flex flex-wrap gap-1.5 mb-2">
+        {PRESET_CATEGORIES.map((c) => {
+          const active = value === c;
+          return (
+            <button
+              type="button"
+              key={c}
+              onClick={() => onChange(c)}
+              className={`rounded-full px-3 py-1 text-xs border transition-colors ${
+                active
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+              }`}
+            >
+              {c}
+            </button>
+          );
+        })}
+      </div>
+      <input
+        list="preset-categories"
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Pick a preset above or type your own"
+        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+      />
+      <datalist id="preset-categories">
+        {PRESET_CATEGORIES.map((c) => (
+          <option key={c} value={c} />
+        ))}
+      </datalist>
+    </label>
+  );
+}
