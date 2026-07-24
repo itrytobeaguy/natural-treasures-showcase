@@ -238,7 +238,7 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
         <h2 className="font-serif text-2xl mb-4">{editing.id ? "Edit design" : "New design"}</h2>
         <div className="space-y-3">
           <Input label="Title" value={editingWithText.title ?? ""} onChange={(v) => setEditing({ ...editingWithText, title: v })} />
-          <Input label="Category (e.g. Shirts, Hoodies)" value={editingWithText.category ?? ""} onChange={(v) => setEditing({ ...editingWithText, category: v })} />
+          <CategoryInput value={editingWithText.category ?? ""} onChange={(v) => setEditing({ ...editingWithText, category: v })} />
           <Input label="Price" type="number" value={String(editingWithText.price ?? 0)} onChange={(v) => setEditing({ ...editingWithText, price: v })} />
           <Input label="Primary image URL (shown first)" value={editingWithText.image_url ?? ""} onChange={(v) => setEditing({ ...editingWithText, image_url: v })} />
           <label className="block">
