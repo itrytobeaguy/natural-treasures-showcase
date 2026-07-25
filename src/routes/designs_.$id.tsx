@@ -22,6 +22,7 @@ const orderSchema = z.object({
   customer_email: z.string().trim().email("Invalid email").max(255),
   shipping_address: z.string().trim().min(5, "Shipping address required").max(500),
   size: z.string().trim().min(1, "Size required").max(20),
+  color: z.string().trim().min(1, "Color required").max(50),
 });
 
 function DesignDetail() {
@@ -37,7 +38,7 @@ function DesignDetail() {
     },
   });
 
-  const [form, setForm] = useState({ customer_name: "", customer_email: "", shipping_address: "", size: "" });
+  const [form, setForm] = useState({ customer_name: "", customer_email: "", shipping_address: "", size: "", color: "" });
   const [submitting, setSubmitting] = useState(false);
   const [imgIdx, setImgIdx] = useState(0);
 
@@ -61,7 +62,7 @@ function DesignDetail() {
       return;
     }
     toast.success("Order placed! We'll be in touch by email shortly.");
-    setForm({ customer_name: "", customer_email: "", shipping_address: "", size: "" });
+    setForm({ customer_name: "", customer_email: "", shipping_address: "", size: "", color: "" });
     navigate({ to: "/designs" });
   }
 
@@ -155,10 +156,11 @@ function DesignDetail() {
 
           <form onSubmit={submit} className="mt-10 space-y-4">
             <h2 className="font-serif text-2xl">Order now</h2>
-            <Field label="Name" value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} />
-            <Field label="Email" type="email" value={form.customer_email} onChange={(v) => setForm({ ...form, customer_email: v })} />
-            <Field label="Size" value={form.size} onChange={(v) => setForm({ ...form, size: v })} placeholder="e.g. M" />
-            <Field label="Shipping address" value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea />
+            <Field label="Name" required value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} placeholder="e.g. Jane Doe" />
+            <Field label="Email" required type="email" value={form.customer_email} onChange={(v) => setForm({ ...form, customer_email: v })} placeholder="e.g. jane@example.com" />
+            <Field label="Size" required value={form.size} onChange={(v) => setForm({ ...form, size: v })} placeholder="e.g. M" />
+            <Field label="Color (if applicable)" required value={form.color} onChange={(v) => setForm({ ...form, color: v })} placeholder='if only one color is provided, please enter "none" or "n/a"' />
+            <Field label="Shipping address" required value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea placeholder="e.g. 123 Main St, City, State, ZIP" />
             <button
               type="submit"
               disabled={submitting || !design.in_stock}
@@ -183,6 +185,7 @@ function Field({
   type = "text",
   textarea,
   placeholder,
+  required,
 }: {
   label: string;
   value: string;
@@ -190,16 +193,20 @@ function Field({
   type?: string;
   textarea?: boolean;
   placeholder?: string;
+  required?: boolean;
 }) {
   const Cmp: any = textarea ? "textarea" : "input";
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">
+        {label}{required && <span className="text-primary ml-1">*</span>}
+      </span>
       <Cmp
         type={type}
         value={value}
         onChange={(e: any) => onChange(e.target.value)}
         placeholder={placeholder}
+        required={required}
         rows={textarea ? 3 : undefined}
         className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
       />
