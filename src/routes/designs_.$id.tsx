@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Leaf, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 
-export const Route = createFileRoute("/designs/$id")({
+export const Route = createFileRoute("/designs_/$id")({
   component: DesignDetail,
   head: ({ params }) => ({
     meta: [

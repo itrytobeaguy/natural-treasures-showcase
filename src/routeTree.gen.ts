@@ -14,7 +14,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DesignsIdRouteImport } from './routes/designs.$id'
+import { Route as DesignsIdRouteImport } from './routes/designs_.$id'
 
 const DesignsRoute = DesignsRouteImport.update({
   id: '/designs',
@@ -42,9 +42,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsIdRoute = DesignsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => DesignsRoute,
+  id: '/designs_/$id',
+  path: '/designs/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -52,7 +52,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/designs': typeof DesignsRouteWithChildren
+  '/designs': typeof DesignsRoute
   '/designs/$id': typeof DesignsIdRoute
 }
 export interface FileRoutesByTo {
@@ -60,7 +60,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/designs': typeof DesignsRouteWithChildren
+  '/designs': typeof DesignsRoute
   '/designs/$id': typeof DesignsIdRoute
 }
 export interface FileRoutesById {
@@ -69,8 +69,8 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/designs': typeof DesignsRouteWithChildren
-  '/designs/$id': typeof DesignsIdRoute
+  '/designs': typeof DesignsRoute
+  '/designs_/$id': typeof DesignsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -84,7 +84,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/designs'
-    | '/designs/$id'
+    | '/designs_/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,7 +92,8 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
-  DesignsRoute: typeof DesignsRouteWithChildren
+  DesignsRoute: typeof DesignsRoute
+  DesignsIdRoute: typeof DesignsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -132,44 +133,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/designs/$id': {
-      id: '/designs/$id'
-      path: '/$id'
+    '/designs_/$id': {
+      id: '/designs_/$id'
+      path: '/designs/$id'
       fullPath: '/designs/$id'
       preLoaderRoute: typeof DesignsIdRouteImport
-      parentRoute: typeof DesignsRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface DesignsRouteChildren {
-  DesignsIdRoute: typeof DesignsIdRoute
-}
-
-const DesignsRouteChildren: DesignsRouteChildren = {
-  DesignsIdRoute: DesignsIdRoute,
-}
-
-const DesignsRouteWithChildren =
-  DesignsRoute._addFileChildren(DesignsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
-  DesignsRoute: DesignsRouteWithChildren,
+  DesignsRoute: DesignsRoute,
+  DesignsIdRoute: DesignsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
