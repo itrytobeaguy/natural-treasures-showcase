@@ -58,6 +58,7 @@ export type Database = {
       }
       orders: {
         Row: {
+          color: string | null
           created_at: string
           customer_email: string
           customer_name: string
@@ -69,6 +70,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          color?: string | null
           created_at?: string
           customer_email: string
           customer_name: string
@@ -80,6 +82,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          color?: string | null
           created_at?: string
           customer_email?: string
           customer_name?: string
