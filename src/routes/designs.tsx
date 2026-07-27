@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Leaf } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/designs")({
   component: DesignsPage,
@@ -27,6 +28,7 @@ type Design = {
 };
 
 function DesignsPage() {
+  const hidePrices = useHidePrices();
   const { data, isLoading } = useQuery({
     queryKey: ["designs"],
     queryFn: async () => {
@@ -120,7 +122,9 @@ function DesignsPage() {
                     </p>
                   )}
                 </div>
-                <p className="text-sm">${Number(d.price).toFixed(2)}</p>
+                <p className={hidePrices ? "text-xs text-muted-foreground max-w-[55%] text-right" : "text-sm"}>
+                  {hidePrices ? PRICE_HIDDEN_TEXT : `$${Number(d.price).toFixed(2)}`}
+                </p>
               </div>
             </Link>
           ))}
