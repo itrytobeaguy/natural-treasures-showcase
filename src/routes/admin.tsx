@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useHidePrices } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -97,6 +98,17 @@ function AdminPage() {
 function AdminDashboard({ onSignOut, email }: { onSignOut: () => void; email: string }) {
   const qc = useQueryClient();
   const [tab, setTab] = useState<"orders" | "designs">("orders");
+  const hidePrices = useHidePrices();
+
+  async function toggleHidePrices() {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hide_prices: !hidePrices, updated_at: new Date().toISOString() })
+      .eq("id", true);
+    if (error) return toast.error(error.message);
+    toast.success(!hidePrices ? "Prices hidden site-wide" : "Prices are visible");
+    qc.invalidateQueries({ queryKey: ["site-settings"] });
+  }
 
   const orders = useQuery({
     queryKey: ["admin-orders"],
@@ -134,7 +146,21 @@ function AdminDashboard({ onSignOut, email }: { onSignOut: () => void; email: st
           <h1 className="font-serif text-4xl">Admin</h1>
           <p className="text-sm text-muted-foreground mt-1">{email}</p>
         </div>
-        <button onClick={onSignOut} className="text-sm text-muted-foreground hover:text-foreground">Sign out</button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleHidePrices}
+            aria-pressed={hidePrices}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors ${
+              hidePrices
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+            }`}
+          >
+            <span className={`h-2 w-2 rounded-full ${hidePrices ? "bg-primary-foreground" : "bg-muted-foreground/50"}`} />
+            {hidePrices ? "Prices hidden" : "Hide prices"}
+          </button>
+          <button onClick={onSignOut} className="text-sm text-muted-foreground hover:text-foreground">Sign out</button>
+        </div>
       </div>
 
       <div className="flex gap-2 mb-8 border-b border-border">
