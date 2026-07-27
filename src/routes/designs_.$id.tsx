@@ -21,7 +21,7 @@ export const Route = createFileRoute("/designs_/$id")({
 const orderSchema = z.object({
   customer_name: z.string().trim().min(1, "Name required").max(100),
   customer_email: z.string().trim().email("Invalid email").max(255),
-  shipping_address: z.string().trim().min(5, "Shipping address required").max(500),
+  shipping_address: z.string().trim().min(5, "Address and comments required").max(500),
   size: z.string().trim().min(1, "Size required").max(20),
   color: z.string().trim().min(1, "Color required").max(50),
 });
