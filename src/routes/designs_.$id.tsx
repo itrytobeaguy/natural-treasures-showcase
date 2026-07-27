@@ -21,7 +21,7 @@ export const Route = createFileRoute("/designs_/$id")({
 const orderSchema = z.object({
   customer_name: z.string().trim().min(1, "Name required").max(100),
   customer_email: z.string().trim().email("Invalid email").max(255),
-  shipping_address: z.string().trim().min(5, "Shipping address required").max(500),
+  shipping_address: z.string().trim().min(5, "Address and comments required").max(500),
   size: z.string().trim().min(1, "Size required").max(20),
   color: z.string().trim().min(1, "Color required").max(50),
 });
@@ -60,10 +60,10 @@ function DesignDetail() {
     });
     setSubmitting(false);
     if (error) {
-      toast.error("Could not place order. Please try again.");
+      toast.error("Could not send inquiry. Please try again.");
       return;
     }
-    toast.success("Order placed! We'll be in touch by email shortly.");
+    toast.success("Inquiry sent! We'll be in touch by email shortly.");
     setForm({ customer_name: "", customer_email: "", shipping_address: "", size: "", color: "" });
     navigate({ to: "/designs" });
   }
@@ -161,21 +161,21 @@ function DesignDetail() {
           )}
 
           <form onSubmit={submit} className="mt-10 space-y-4">
-            <h2 className="font-serif text-2xl">Order now</h2>
+            <h2 className="font-serif text-2xl">Inquire Now</h2>
             <Field label="Name" required value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} placeholder="e.g. Jane Doe" />
             <Field label="Email" required type="email" value={form.customer_email} onChange={(v) => setForm({ ...form, customer_email: v })} placeholder="e.g. jane@example.com" />
             <Field label="Size" required value={form.size} onChange={(v) => setForm({ ...form, size: v })} placeholder="e.g. M" />
             <Field label="Color (if applicable)" required value={form.color} onChange={(v) => setForm({ ...form, color: v })} placeholder='if only one color is provided, please enter "none" or "n/a"' />
-            <Field label="Shipping address" required value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea placeholder="e.g. 123 Main St, City, State, ZIP" />
+            <Field label="ADDRESS AND ADDITIONAL COMMENTS" required value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea placeholder="e.g. 123 Main St, City, State, ZIP" />
             <button
               type="submit"
               disabled={submitting || !design.in_stock}
               className="w-full rounded-full bg-primary text-primary-foreground py-3 text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              {!design.in_stock ? "Currently unavailable" : submitting ? "Placing order…" : "Place order"}
+              {!design.in_stock ? "Currently unavailable" : submitting ? "Sending inquiry…" : "Send inquiry"}
             </button>
             <p className="text-xs text-muted-foreground">
-              You'll receive a confirmation email. We ship pieces manually — please allow a few days.
+              Inquire about this design to recieve further details, including its price and expected delivery time.
             </p>
           </form>
         </div>
