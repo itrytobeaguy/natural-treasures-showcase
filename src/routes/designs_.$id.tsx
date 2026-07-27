@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Leaf, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/designs_/$id")({
   component: DesignDetail,
@@ -28,6 +29,7 @@ const orderSchema = z.object({
 function DesignDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
+  const hidePrices = useHidePrices();
 
   const { data: design, isLoading } = useQuery({
     queryKey: ["design", id],
@@ -149,7 +151,11 @@ function DesignDetail() {
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{design.category}</p>
           )}
           <h1 className="font-serif text-4xl mt-2">{design.title}</h1>
-          <p className="mt-4 text-2xl">${Number(design.price).toFixed(2)}</p>
+          {hidePrices ? (
+            <p className="mt-4 text-base text-muted-foreground italic">{PRICE_HIDDEN_TEXT}</p>
+          ) : (
+            <p className="mt-4 text-2xl">${Number(design.price).toFixed(2)}</p>
+          )}
           {design.description && (
             <p className="mt-6 text-muted-foreground leading-relaxed">{design.description}</p>
           )}
