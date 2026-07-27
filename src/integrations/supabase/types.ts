@@ -103,6 +103,24 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          hide_prices: boolean
+          id: boolean
+          updated_at: string
+        }
+        Insert: {
+          hide_prices?: boolean
+          id?: boolean
+          updated_at?: string
+        }
+        Update: {
+          hide_prices?: boolean
+          id?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
