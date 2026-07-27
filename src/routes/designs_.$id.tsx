@@ -60,10 +60,10 @@ function DesignDetail() {
     });
     setSubmitting(false);
     if (error) {
-      toast.error("Could not place order. Please try again.");
+      toast.error("Could not send inquiry. Please try again.");
       return;
     }
-    toast.success("Order placed! We'll be in touch by email shortly.");
+    toast.success("Inquiry sent! We'll be in touch by email shortly.");
     setForm({ customer_name: "", customer_email: "", shipping_address: "", size: "", color: "" });
     navigate({ to: "/designs" });
   }
