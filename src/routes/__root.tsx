@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
+import logoAsset from "@/assets/natural-treasures-logo.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -92,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" } as any,
       {
@@ -182,8 +183,8 @@ function SiteHeader() {
   return (
     <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
       <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
-        <Link to="/" className="font-serif text-xl tracking-tight text-foreground">
-          Natural Treasures
+        <Link to="/" aria-label="Natural Treasures — Home" className="flex items-center">
+          <img src={logoAsset.url} alt="Natural Treasures" className="h-10 w-auto" />
         </Link>
         <nav className="hidden sm:flex items-center gap-8 text-sm text-muted-foreground">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Home</Link>
