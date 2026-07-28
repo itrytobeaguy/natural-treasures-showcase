@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
+import faviconAsset from "@/assets/favicon.png.asset.json";
 import logoAsset from "@/assets/natural-treasures-logo.png.asset.json";
 
 function NotFoundComponent() {
