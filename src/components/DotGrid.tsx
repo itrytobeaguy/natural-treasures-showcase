@@ -68,11 +68,11 @@ export function DotGrid() {
           const screenY = dy - sy;
 
           let radius = BASE_RADIUS;
-          // base muted color
-          let r = 180;
-          let g = 180;
-          let b = 170;
-          let a = 0.35;
+          // base muted gray, always visible
+          let r = 140;
+          let g = 140;
+          let b = 135;
+          let a = 0.55;
 
           if (active) {
             const ddx = dx - mx;
