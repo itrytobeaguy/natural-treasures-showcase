@@ -22,8 +22,8 @@ function Contact() {
         we can.
       </p>
       <div className="mt-10 space-y-4 text-lg">
-        <a href="mailto:niktapo31@gmail.com" className="flex items-center gap-3 hover:text-primary transition-colors">
-          <Mail className="h-5 w-5" /> niktapo31@gmail.com
+        <a href="mailto:naturaltreasuresclothing@gmail.com" className="flex items-center gap-3 hover:text-primary transition-colors">
+          <Mail className="h-5 w-5" /> naturaltreasuresclothing@gmail.com
         </a>
       </div>
     </section>
