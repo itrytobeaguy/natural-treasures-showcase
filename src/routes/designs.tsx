@@ -42,15 +42,28 @@ function DesignsPage() {
   });
 
   const [active, setActive] = useState<string>("All");
+  const [q, setQ] = useState("");
+  const [stock, setStock] = useState<"all" | "in" | "out">("all");
+  const [sort, setSort] = useState<"default" | "az" | "price-asc" | "price-desc">("default");
   const categories = useMemo(() => {
     const set = new Set<string>();
     data?.forEach((d) => d.category && set.add(d.category));
     return ["All", ...Array.from(set).sort()];
   }, [data]);
-  const filtered = useMemo(
-    () => (active === "All" ? data ?? [] : (data ?? []).filter((d) => d.category === active)),
-    [data, active],
-  );
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    let list = (data ?? []).filter((d) => {
+      if (active !== "All" && d.category !== active) return false;
+      if (stock === "in" && !d.in_stock) return false;
+      if (stock === "out" && d.in_stock) return false;
+      if (term && !`${d.title} ${d.category ?? ""}`.toLowerCase().includes(term)) return false;
+      return true;
+    });
+    if (sort === "az") list = [...list].sort((a, b) => a.title.localeCompare(b.title));
+    if (sort === "price-asc") list = [...list].sort((a, b) => Number(a.price) - Number(b.price));
+    if (sort === "price-desc") list = [...list].sort((a, b) => Number(b.price) - Number(a.price));
+    return list;
+  }, [data, active, q, stock, sort]);
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
@@ -59,6 +72,41 @@ function DesignsPage() {
         <p className="mt-4 text-muted-foreground">
           Each piece is made in small quantities. Tap one to see details and place an order.
         </p>
+      </div>
+
+      <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search designs…"
+            aria-label="Search designs"
+            className="w-full rounded-full border border-border bg-background/70 pl-10 pr-4 py-2.5 text-sm outline-none focus:border-primary/50"
+          />
+        </div>
+        <select
+          value={stock}
+          onChange={(e) => setStock(e.target.value as typeof stock)}
+          aria-label="Availability"
+          className="rounded-full border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+        >
+          <option value="all">All availability</option>
+          <option value="in">In stock</option>
+          <option value="out">Unavailable</option>
+        </select>
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value as typeof sort)}
+          aria-label="Sort designs"
+          className="rounded-full border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+        >
+          <option value="default">Featured order</option>
+          <option value="az">Name A–Z</option>
+          {!hidePrices && <option value="price-asc">Price: low to high</option>}
+          {!hidePrices && <option value="price-desc">Price: high to low</option>}
+        </select>
       </div>
 
       {categories.length > 1 && (
@@ -91,7 +139,7 @@ function DesignsPage() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.length === 0 && (
-            <p className="text-muted-foreground col-span-full">No designs in this category yet.</p>
+            <p className="text-muted-foreground col-span-full">No designs match your search.</p>
           )}
           {filtered.map((d) => (
             <Link
