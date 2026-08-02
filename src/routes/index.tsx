@@ -3,6 +3,7 @@ import { Leaf } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
+import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const hidePrices = useHidePrices();
   const { data: designs } = useQuery({
     queryKey: ["featured-designs"],
     queryFn: async () => {
