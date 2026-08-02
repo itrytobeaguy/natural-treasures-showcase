@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -217,6 +217,26 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
 function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => void }) {
   const [editing, setEditing] = useState<any | null>(null);
   const [view, setView] = useState<"list" | "grid">("list");
+  const [q, setQ] = useState("");
+  const [cat, setCat] = useState("All");
+  const [stock, setStock] = useState<"all" | "in" | "out">("all");
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    designs.forEach((d) => d.category && set.add(d.category));
+    return ["All", ...Array.from(set).sort()];
+  }, [designs]);
+
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    return designs.filter((d) => {
+      if (cat !== "All" && d.category !== cat) return false;
+      if (stock === "in" && !d.in_stock) return false;
+      if (stock === "out" && d.in_stock) return false;
+      if (term && !`${d.title ?? ""} ${d.category ?? ""} ${d.description ?? ""}`.toLowerCase().includes(term)) return false;
+      return true;
+    });
+  }, [designs, q, cat, stock]);
 
   async function save(d: any) {
     const extraImages: string[] = (d.image_urls_text ?? "")
@@ -306,9 +326,32 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
           <button onClick={() => setView("grid")} className={`px-3 py-1.5 rounded-full transition-colors ${view === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>Grid</button>
         </div>
       </div>
+      <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
+        <div className="relative flex-1">
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search designs…"
+            aria-label="Search designs"
+            className="w-full rounded-full border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+          />
+        </div>
+        <select value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Filter by category" className="rounded-full border border-border bg-background px-4 py-2.5 text-sm">
+          {categories.map((c) => (
+            <option key={c} value={c}>{c === "All" ? "All categories" : c}</option>
+          ))}
+        </select>
+        <select value={stock} onChange={(e) => setStock(e.target.value as typeof stock)} aria-label="Filter by availability" className="rounded-full border border-border bg-background px-4 py-2.5 text-sm">
+          <option value="all">All availability</option>
+          <option value="in">In stock</option>
+          <option value="out">Unavailable</option>
+        </select>
+      </div>
+      <p className="mb-3 text-xs text-muted-foreground">{filtered.length} of {designs.length} designs</p>
       {view === "list" ? (
         <div className="space-y-2">
-          {designs.map((d) => (
+          {filtered.map((d) => (
             <div key={d.id} className="rounded-xl border border-border bg-card p-4 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-lg overflow-hidden bg-secondary flex-shrink-0">
@@ -328,7 +371,7 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {designs.map((d) => (
+          {filtered.map((d) => (
             <div key={d.id} className="rounded-xl border border-border bg-card overflow-hidden">
               <div className="aspect-square bg-secondary overflow-hidden">
                 {d.image_url ? <img src={d.image_url} alt={d.title} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
