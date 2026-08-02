@@ -128,6 +128,49 @@ function Home() {
           ))}
         </div>
       </section>
+
+      {(designs?.length ?? 0) > 0 && (
+        <section className="mx-auto max-w-6xl px-6 pb-32">
+          <div className="flex items-end justify-between mb-10">
+            <h2 className="font-serif text-4xl">The collection</h2>
+            <Link to="/designs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              View all
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {(designs ?? []).slice(0, 6).map((d: any) => {
+              const img = d.image_url ?? d.image_urls?.[0] ?? null;
+              return (
+                <Link
+                  key={d.id}
+                  to="/designs/$id"
+                  params={{ id: d.id }}
+                  className="group rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-lg"
+                >
+                  <div className="aspect-[4/5] bg-secondary overflow-hidden">
+                    {img ? (
+                      <img src={img} alt={d.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        <Leaf className="h-10 w-10 opacity-40" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    {d.category && (
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{d.category}</p>
+                    )}
+                    <h3 className="font-serif text-xl mt-1">{d.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {hidePrices ? PRICE_HIDDEN_TEXT : `$${Number(d.price).toFixed(2)}`}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
