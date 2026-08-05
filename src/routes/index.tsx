@@ -162,7 +162,7 @@ function Home() {
                     )}
                     <h3 className="font-serif text-xl mt-1">{d.title}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      {hidePrices ? PRICE_HIDDEN_TEXT : `$${Number(d.price).toFixed(2)}`}
+                      {hidePrices ? <HiddenPriceText /> : `$${Number(d.price).toFixed(2)}`}
                     </p>
                   </div>
                 </Link>

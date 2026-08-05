@@ -171,7 +171,7 @@ function DesignsPage() {
                   )}
                 </div>
                 <p className={hidePrices ? "text-xs text-muted-foreground max-w-[55%] text-right" : "text-sm"}>
-                  {hidePrices ? PRICE_HIDDEN_TEXT : `$${Number(d.price).toFixed(2)}`}
+                  {hidePrices ? <HiddenPriceText /> : `$${Number(d.price).toFixed(2)}`}
                 </p>
               </div>
             </Link>
