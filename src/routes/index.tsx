@@ -3,7 +3,7 @@ import { Leaf } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
-import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
+import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -162,7 +162,7 @@ function Home() {
                     )}
                     <h3 className="font-serif text-xl mt-1">{d.title}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      {hidePrices ? PRICE_HIDDEN_TEXT : `$${Number(d.price).toFixed(2)}`}
+                      {hidePrices ? <HiddenPriceText /> : `$${Number(d.price).toFixed(2)}`}
                     </p>
                   </div>
                 </Link>

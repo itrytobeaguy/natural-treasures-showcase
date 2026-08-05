@@ -5,7 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Leaf, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
-import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
+import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/designs_/$id")({
   component: DesignDetail,
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/designs_/$id")({
 const orderSchema = z.object({
   customer_name: z.string().trim().min(1, "Name required").max(100),
   customer_email: z.string().trim().email("Invalid email").max(255),
-  shipping_address: z.string().trim().min(5, "Address and comments required").max(500),
+  shipping_address: z.string().trim().max(500).optional(),
   size: z.string().trim().min(1, "Size required").max(20),
   color: z.string().trim().min(1, "Color required").max(50),
 });
@@ -55,6 +55,7 @@ function DesignDetail() {
     const { data: sess } = await supabase.auth.getUser();
     const { error } = await supabase.from("orders").insert({
       ...parsed.data,
+      shipping_address: parsed.data.shipping_address ?? "",
       design_id: id,
       user_id: sess.user?.id ?? null,
     });
@@ -152,7 +153,9 @@ function DesignDetail() {
           )}
           <h1 className="font-serif text-4xl mt-2">{design.title}</h1>
           {hidePrices ? (
-            <p className="mt-4 text-base text-muted-foreground italic">{PRICE_HIDDEN_TEXT}</p>
+            <p className="mt-4 text-base text-muted-foreground italic">
+              <HiddenPriceText />
+            </p>
           ) : (
             <p className="mt-4 text-2xl">${Number(design.price).toFixed(2)}</p>
           )}
@@ -166,7 +169,7 @@ function DesignDetail() {
             <Field label="Email" required type="email" value={form.customer_email} onChange={(v) => setForm({ ...form, customer_email: v })} placeholder="e.g. jane@example.com" />
             <Field label="Size" required value={form.size} onChange={(v) => setForm({ ...form, size: v })} placeholder="e.g. M" />
             <Field label="Color (if applicable)" required value={form.color} onChange={(v) => setForm({ ...form, color: v })} placeholder='if only one color is provided, please enter "none" or "n/a"' />
-            <Field label="ADDRESS AND ADDITIONAL COMMENTS" required value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea placeholder="e.g. 123 Main St, City, State, ZIP" />
+            <Field label="ADDITIONAL COMMENTS" value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea placeholder="e.g. 123 Main St, City, State, ZIP" />
             <button
               type="submit"
               disabled={submitting || !design.in_stock}
