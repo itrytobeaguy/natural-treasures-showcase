@@ -55,6 +55,7 @@ function DesignDetail() {
     const { data: sess } = await supabase.auth.getUser();
     const { error } = await supabase.from("orders").insert({
       ...parsed.data,
+      shipping_address: parsed.data.shipping_address ?? "",
       design_id: id,
       user_id: sess.user?.id ?? null,
     });
