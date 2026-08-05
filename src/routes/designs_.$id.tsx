@@ -5,7 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Leaf, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
-import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
+import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/designs_/$id")({
   component: DesignDetail,

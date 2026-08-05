@@ -3,7 +3,7 @@ import { Leaf } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
-import { useHidePrices, PRICE_HIDDEN_TEXT } from "@/hooks/useHidePrices";
+import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
 
 export const Route = createFileRoute("/")({
   component: Home,
