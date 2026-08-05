@@ -169,7 +169,7 @@ function DesignDetail() {
             <Field label="Email" required type="email" value={form.customer_email} onChange={(v) => setForm({ ...form, customer_email: v })} placeholder="e.g. jane@example.com" />
             <Field label="Size" required value={form.size} onChange={(v) => setForm({ ...form, size: v })} placeholder="e.g. M" />
             <Field label="Color (if applicable)" required value={form.color} onChange={(v) => setForm({ ...form, color: v })} placeholder='if only one color is provided, please enter "none" or "n/a"' />
-            <Field label="ADDITIONAL COMMENTS" value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea placeholder="e.g. 123 Main St, City, State, ZIP" />
+            <Field label="ADDITIONAL COMMENTS" value={form.shipping_address} onChange={(v) => setForm({ ...form, shipping_address: v })} textarea />
             <button
               type="submit"
               disabled={submitting || !design.in_stock}
