@@ -141,7 +141,7 @@ function Home() {
           <div className="flex items-end justify-between mb-10">
             <h2 className="font-serif text-4xl">The collection</h2>
             <Link to="/designs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              View all
+              Browse every design →
             </Link>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">

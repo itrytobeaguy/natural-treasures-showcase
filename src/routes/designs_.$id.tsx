@@ -12,7 +12,7 @@ export const Route = createFileRoute("/designs_/$id")({
   head: ({ params }) => ({
     meta: [
       { title: `Design — Natural Treasures` },
-      { name: "description", content: "View design details and place an order." },
+      { name: "description", content: "Take a closer look at this design and inquire about it." },
       { property: "og:title", content: `Design ${params.id}` },
     ],
   }),
