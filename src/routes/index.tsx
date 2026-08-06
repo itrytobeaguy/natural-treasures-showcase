@@ -47,11 +47,12 @@ function Home() {
         <div className="relative overflow-hidden rounded-3xl border border-border bg-secondary">
           <img
             src={heroImage}
-            alt="Woman wearing a natural linen shirt in a misty forest at sunrise"
+            alt="Model wearing the Yosemite National Park tee from Natural Treasures in a misty pine forest"
             width={1280}
             height={1600}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="absolute inset-0 h-full w-full object-cover object-[70%_center]"
           />
+
           <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/25" />
           <div className="relative px-7 py-20 sm:px-14 sm:py-28 lg:py-36 max-w-2xl">
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8 animate-fade-in">
