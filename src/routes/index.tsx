@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
+import heroImage from "@/assets/hero-natural.jpg";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -42,72 +43,77 @@ function Home() {
 
   return (
     <div>
-      <section className="mx-auto max-w-6xl px-6 pt-24 pb-32">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {featured.length > 0 && (
-            <div className="relative hidden lg:flex items-center justify-center h-[26rem]">
-              {featured.slice(0, 3).map((d: any, i: number) => {
-                const img = d.image_url ?? d.image_urls?.[0] ?? null;
-                const offsets = [
-                  { top: "0%", left: "5%", rotate: "-6deg", z: 30, w: "w-52" },
-                  { top: "22%", left: "38%", rotate: "4deg", z: 20, w: "w-48" },
-                  { top: "52%", left: "12%", rotate: "-3deg", z: 10, w: "w-44" },
-                ];
-                const o = offsets[i] ?? offsets[0];
-                return (
-                  <Link
-                    key={d.id}
-                    to="/designs/$id"
-                    params={{ id: d.id }}
-                    className="group absolute block will-change-transform"
-                    style={{ top: o.top, left: o.left, transform: `rotate(${o.rotate})`, zIndex: o.z }}
-                  >
-                    <div className={`${o.w} aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border shadow-xl transition-all duration-300 group-hover:scale-[1.06] group-hover:rotate-0 group-hover:border-primary/40 group-hover:shadow-2xl`}>
-                      {img ? (
-                        <img
-                          src={img}
-                          alt={d.title}
-                          className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                          <Leaf className="h-10 w-10 opacity-40" />
-                        </div>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
+      <section className="mx-auto max-w-6xl px-6 pt-16 pb-28">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-secondary">
+          <img
+            src={heroImage}
+            alt="Woman wearing a natural linen shirt in a misty forest at sunrise"
+            width={1280}
+            height={1600}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/25" />
+          <div className="relative px-7 py-20 sm:px-14 sm:py-28 lg:py-36 max-w-2xl">
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8 animate-fade-in">
+              <Leaf className="h-3.5 w-3.5" /> All Natural — grown slowly, worn gently
             </div>
-          )}
-
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground mb-8">
-              <Leaf className="h-3.5 w-3.5" /> Natural Treasures
-            </div>
-            <h1 className="font-serif text-5xl sm:text-7xl leading-[1.05] text-foreground">
-              Clothing that <em className="italic text-primary">breathes</em> with the seasons.
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.03] text-foreground animate-fade-in">
+              Breathe Natural.
+              <br />
+              <em className="italic text-primary">Stay Comfortable.</em>
             </h1>
-            <p className="mt-8 text-lg text-muted-foreground max-w-xl leading-relaxed">
-              A small, slow collection of pieces made from natural fibers — designed to be worn quietly,
-              for a long time.
+            <p className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-lg animate-fade-in">
+              It starts in a field, not a factory. Linen, cotton and hemp, cut by hand and finished in
+              small batches — so what touches your skin still remembers where it came from. Soft on the
+              first morning. Softer on the thousandth.
             </p>
-            <div className="mt-10 flex gap-4">
+            <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 to="/designs"
                 className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                View designs
+                Explore the collection
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+                className="inline-flex items-center rounded-full border border-border bg-background/60 backdrop-blur-sm px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
               >
-                Get in touch
+                Tell us your story
               </Link>
             </div>
           </div>
         </div>
+
+        {featured.length > 0 && (
+          <div className="mt-10 grid grid-cols-3 gap-4 sm:gap-6">
+            {featured.slice(0, 3).map((d: any) => {
+              const img = d.image_url ?? d.image_urls?.[0] ?? null;
+              return (
+                <Link
+                  key={d.id}
+                  to="/designs/$id"
+                  params={{ id: d.id }}
+                  className="group block rounded-2xl overflow-hidden border border-border bg-secondary transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-xl"
+                >
+                  <div className="aspect-[4/5]">
+                    {img ? (
+                      <img
+                        src={img}
+                        alt={d.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        <Leaf className="h-8 w-8 opacity-40" />
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </section>
 
 
