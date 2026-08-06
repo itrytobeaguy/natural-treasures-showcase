@@ -5,6 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
 import heroImage from "@/assets/hero-natural.jpg";
+import cardFibers from "@/assets/card-fibers.jpg";
+import cardBatches from "@/assets/card-batches.jpg";
+import cardMadeToOrder from "@/assets/card-madetoorder.jpg";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -121,16 +124,28 @@ function Home() {
       <section className="mx-auto max-w-6xl px-6 pb-32">
         <div className="grid sm:grid-cols-3 gap-8">
           {[
-            { t: "Natural fibers", d: "Linen, cotton, hemp — chosen for how they age." },
-            { t: "Small batches", d: "Every piece is made in limited quantity, by hand." },
-            { t: "Made to order", d: "Order what you love and we send it directly to you." },
+            { t: "Natural fibers", d: "Linen, cotton, hemp — chosen for how they age.", img: cardFibers, alt: "Person wearing a natural linen tee in a field of tall grass" },
+            { t: "Small batches", d: "Every piece is made in limited quantity, by hand.", img: cardBatches, alt: "Person wearing a sage cotton sweatshirt among misty pines" },
+            { t: "Made to order", d: "Order what you love and we send it directly to you.", img: cardMadeToOrder, alt: "Two people wearing natural cotton tees walking a forest trail" },
           ].map((f) => (
             <div
               key={f.t}
-              className="rounded-2xl border border-border bg-card p-8 transition-all duration-300 hover:scale-[1.03] hover:bg-accent/40 hover:border-primary/40 hover:shadow-lg"
+              className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:scale-[1.03] hover:bg-accent/40 hover:border-primary/40 hover:shadow-lg"
             >
-              <h3 className="font-serif text-2xl">{f.t}</h3>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.d}</p>
+              <div className="aspect-[4/3] overflow-hidden bg-secondary">
+                <img
+                  src={f.img}
+                  alt={f.alt}
+                  loading="lazy"
+                  width={1024}
+                  height={768}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                />
+              </div>
+              <div className="p-8">
+                <h3 className="font-serif text-2xl">{f.t}</h3>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.d}</p>
+              </div>
             </div>
           ))}
         </div>
