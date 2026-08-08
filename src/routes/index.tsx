@@ -128,13 +128,15 @@ function Home() {
 
       <section className="mx-auto max-w-6xl px-6 pb-32">
         <div className="grid sm:grid-cols-3 gap-8">
-          {[
+          {([
             { t: "Natural fibers", d: "Linen, cotton, hemp — chosen for how they age.", img: cardFibers, alt: "Person wearing a natural linen tee in a field of tall grass" },
             { t: "Small batches", d: "Every piece is made in limited quantity, by hand.", img: cardBatches, alt: "Person wearing a sage cotton sweatshirt among misty pines" },
             { t: "Made to order", d: "Order what you love and we send it directly to you.", img: cardMadeToOrder, alt: "Two people wearing natural cotton tees walking a forest trail" },
-          ].map((f) => (
-            <div
+          ]).map((f, i) => (
+            <Reveal
               key={f.t}
+              variant={i === 1 ? "up" : "blur"}
+              delay={i * 150}
               className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:scale-[1.03] hover:bg-accent/40 hover:border-primary/40 hover:shadow-lg"
             >
               <div className="aspect-[4/3] overflow-hidden bg-secondary">
@@ -151,28 +153,28 @@ function Home() {
                 <h3 className="font-serif text-2xl">{f.t}</h3>
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.d}</p>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {(designs?.length ?? 0) > 0 && (
         <section className="mx-auto max-w-6xl px-6 pb-32">
-          <div className="flex items-end justify-between mb-10">
+          <Reveal className="flex items-end justify-between mb-10">
             <h2 className="font-serif text-4xl">The collection</h2>
             <Link to="/designs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Browse every design →
             </Link>
-          </div>
+          </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(designs ?? []).slice(0, 6).map((d: any) => {
+            {(designs ?? []).slice(0, 6).map((d: any, i: number) => {
               const img = d.image_url ?? d.image_urls?.[0] ?? null;
               return (
+                <Reveal key={d.id} variant="up" delay={(i % 3) * 120}>
                 <Link
-                  key={d.id}
                   to="/designs/$id"
                   params={{ id: d.id }}
-                  className="group rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-lg"
+                  className="group block rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-lg"
                 >
                   <div className="aspect-[4/5] bg-secondary overflow-hidden">
                     {img ? (
@@ -193,6 +195,7 @@ function Home() {
                     </p>
                   </div>
                 </Link>
+                </Reveal>
               );
             })}
           </div>
