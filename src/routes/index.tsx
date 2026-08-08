@@ -49,7 +49,7 @@ function Home() {
       <section className="mx-auto max-w-6xl px-6 pt-16 pb-28">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-secondary">
           <img
-            src={heroImage}
+            src={heroImage.url}
             alt="Model wearing the Yosemite National Park tee from Natural Treasures in a misty pine forest"
             width={1280}
             height={1600}
