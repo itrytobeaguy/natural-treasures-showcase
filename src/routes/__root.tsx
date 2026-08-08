@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import faviconAsset from "@/assets/favicon.png.asset.json";
 import logoAsset from "@/assets/natural-treasures-logo.png.asset.json";
 
@@ -151,6 +152,7 @@ function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <DotGrid />
+      <ScrollProgress />
       <div className="relative z-10 flex flex-col min-h-screen">
         <SiteHeader />
         <main className="flex-1">{children}</main>

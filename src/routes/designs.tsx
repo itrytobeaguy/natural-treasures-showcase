@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Leaf, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
+import { Reveal } from "@/components/Reveal";
 
 export const Route = createFileRoute("/designs")({
   component: DesignsPage,
@@ -67,12 +68,12 @@ function DesignsPage() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
-      <div className="mb-14 max-w-xl">
+      <Reveal variant="blur" className="mb-14 max-w-xl">
         <h1 className="font-serif text-5xl">The collection</h1>
         <p className="mt-4 text-muted-foreground">
           Each piece is made in small quantities. Tap one to see details and place an order.
         </p>
-      </div>
+      </Reveal>
 
       <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
         <div className="relative flex-1">
@@ -141,9 +142,9 @@ function DesignsPage() {
           {filtered.length === 0 && (
             <p className="text-muted-foreground col-span-full">No designs match your search.</p>
           )}
-          {filtered.map((d) => (
+          {filtered.map((d, i) => (
+            <Reveal key={d.id} variant="up" delay={(i % 3) * 110}>
             <Link
-              key={d.id}
               to="/designs/$id"
               params={{ id: d.id }}
               className="group block"
@@ -175,6 +176,7 @@ function DesignsPage() {
                 </p>
               </div>
             </Link>
+            </Reveal>
           ))}
         </div>
       )}
