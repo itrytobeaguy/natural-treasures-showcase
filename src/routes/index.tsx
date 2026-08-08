@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
-import heroImage from "@/assets/hero-natural.jpg";
-import cardFibers from "@/assets/card-fibers.jpg";
-import cardBatches from "@/assets/card-batches.jpg";
-import cardMadeToOrder from "@/assets/card-madetoorder.jpg";
+import heroImage from "@/assets/hero-natural.jpg.asset.json";
+import cardFibers from "@/assets/card-fibers.jpg.asset.json";
+import cardBatches from "@/assets/card-batches.jpg.asset.json";
+import cardMadeToOrder from "@/assets/card-madetoorder.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Home,
