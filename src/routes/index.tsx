@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
-import heroImage from "@/assets/hero-natural.jpg";
-import cardFibers from "@/assets/card-fibers.jpg";
-import cardBatches from "@/assets/card-batches.jpg";
-import cardMadeToOrder from "@/assets/card-madetoorder.jpg";
+import heroImage from "@/assets/hero-natural.jpg.asset.json";
+import cardFibers from "@/assets/card-fibers.jpg.asset.json";
+import cardBatches from "@/assets/card-batches.jpg.asset.json";
+import cardMadeToOrder from "@/assets/card-madetoorder.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -49,7 +49,7 @@ function Home() {
       <section className="mx-auto max-w-6xl px-6 pt-16 pb-28">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-secondary">
           <img
-            src={heroImage}
+            src={heroImage.url}
             alt="Model wearing the Yosemite National Park tee from Natural Treasures in a misty pine forest"
             width={1280}
             height={1600}
@@ -134,7 +134,7 @@ function Home() {
             >
               <div className="aspect-[4/3] overflow-hidden bg-secondary">
                 <img
-                  src={f.img}
+                  src={f.img.url}
                   alt={f.alt}
                   loading="lazy"
                   width={1024}
