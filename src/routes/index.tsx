@@ -134,7 +134,7 @@ function Home() {
             >
               <div className="aspect-[4/3] overflow-hidden bg-secondary">
                 <img
-                  src={f.img}
+                  src={f.img.url}
                   alt={f.alt}
                   loading="lazy"
                   width={1024}
