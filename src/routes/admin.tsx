@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 import { useHidePrices } from "@/hooks/useHidePrices";
 
@@ -56,6 +57,13 @@ function AdminPage() {
     await supabase.auth.signOut();
   }
 
+  async function signInWithGoogle() {
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/admin",
+    });
+    if (result.error) toast.error("Google sign-in failed. Please try again.");
+  }
+
   if (isAdmin === null) {
     return <div className="mx-auto max-w-md px-6 py-24 text-muted-foreground">Loading…</div>;
   }
@@ -72,6 +80,15 @@ function AdminPage() {
             {loading ? "…" : "Sign in"}
           </button>
         </form>
+        <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
+          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+        </div>
+        <button
+          onClick={signInWithGoogle}
+          className="w-full rounded-full border border-border bg-background py-3 text-sm font-medium hover:border-primary/40"
+        >
+          Continue with Google
+        </button>
       </section>
     );
   }
