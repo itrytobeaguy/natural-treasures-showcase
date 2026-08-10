@@ -96,13 +96,10 @@ function Home() {
                 {featured.slice(0, 3).map((d: any, i: number) => {
                   const img = d.image_url ?? d.image_urls?.[0] ?? null;
                   const rotations = ["-2deg", "2deg", "-1deg"];
-                  const offsets = ["0", "-2rem", "-2rem"];
                   const zIndexes = [10, 20, 30];
                   return (
-                    <Reveal
+                    <div
                       key={d.id}
-                      variant="scale"
-                      delay={i * 120}
                       className="w-40 sm:w-44 lg:w-52 aspect-square"
                       style={{
                         marginTop: i === 0 ? "0" : "-2rem",
@@ -110,28 +107,30 @@ function Home() {
                         zIndex: zIndexes[i],
                       }}
                     >
-                      <Link
-                        to="/designs/$id"
-                        params={{ id: d.id }}
-                        className="group relative block h-full w-full rounded-2xl overflow-hidden border border-border bg-secondary shadow-lg transition-all duration-300 hover:scale-[1.06] hover:z-50 hover:rotate-0 hover:shadow-xl"
-                      >
-                        {img ? (
-                          <img
-                            src={img}
-                            alt={d.title}
-                            loading="lazy"
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                            <Leaf className="h-10 w-10 opacity-40" />
+                      <Reveal variant="scale" delay={i * 120} className="h-full w-full">
+                        <Link
+                          to="/designs/$id"
+                          params={{ id: d.id }}
+                          className="group relative block h-full w-full rounded-2xl overflow-hidden border border-border bg-secondary shadow-lg transition-all duration-300 hover:scale-[1.06] hover:z-50 hover:rotate-0 hover:shadow-xl"
+                        >
+                          {img ? (
+                            <img
+                              src={img}
+                              alt={d.title}
+                              loading="lazy"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                              <Leaf className="h-10 w-10 opacity-40" />
+                            </div>
+                          )}
+                          <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 p-3 bg-gradient-to-t from-background/90 to-transparent">
+                            <p className="text-sm font-medium text-foreground truncate">{d.title}</p>
                           </div>
-                        )}
-                        <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 p-3 bg-gradient-to-t from-background/90 to-transparent">
-                          <p className="text-sm font-medium text-foreground truncate">{d.title}</p>
-                        </div>
-                      </Link>
-                    </Reveal>
+                        </Link>
+                      </Reveal>
+                    </div>
                   );
                 })}
               </div>
