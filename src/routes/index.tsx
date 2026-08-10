@@ -92,7 +92,7 @@ function Home() {
             </div>
 
             {featured.length > 0 && (
-              <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full min-h-[320px] lg:min-h-[420px]">
+              <div className="grid grid-cols-3 gap-4 h-full min-h-[320px] lg:min-h-[420px]">
                 {featured.slice(0, 3).map((d: any, i: number) => {
                   const img = d.image_url ?? d.image_urls?.[0] ?? null;
                   return (
@@ -100,7 +100,7 @@ function Home() {
                       key={d.id}
                       variant="scale"
                       delay={i * 120}
-                      className={i === 0 ? "row-span-2" : ""}
+                      className="h-full"
                     >
                       <Link
                         to="/designs/$id"
