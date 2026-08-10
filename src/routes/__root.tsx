@@ -191,7 +191,7 @@ function SiteHeader() {
         </Link>
         <nav className="hidden sm:flex items-center gap-8 text-sm text-muted-foreground">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Home</Link>
-          <Link to="/designs" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Designs</Link>
+          <Link to="/designs" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Products</Link>
           <Link to="/contact" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Contact</Link>
           <Link to="/auth" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Account</Link>
           {isAdmin && (
