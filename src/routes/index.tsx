@@ -59,70 +59,79 @@ function Home() {
             style={{ transform: `translate3d(0, ${hero.offset}px, 0) scale(1.12)` }}
             className="absolute inset-0 h-full w-full object-cover object-[70%_center] will-change-transform"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/70" />
+          <div className="relative grid lg:grid-cols-2 gap-12 lg:gap-16 px-7 py-20 sm:px-14 sm:py-28 lg:py-24 items-center">
+            <div className="max-w-xl">
+              <Reveal variant="blur" className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
+                <Leaf className="h-3.5 w-3.5" /> All Natural — grown slowly, worn gently
+              </Reveal>
+              <Reveal as="h1" delay={100} className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.03] text-foreground">
+                Breathe Natural.
+                <br />
+                <em className="italic text-primary">Stay Comfortable.</em>
+              </Reveal>
+              <Reveal as="p" delay={220} className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-lg">
+                It starts in a field, not a factory. Linen, cotton and hemp, cut by hand and finished in
+                small batches — so what touches your skin still remembers where it came from. Soft on the
+                first morning. Softer on the thousandth.
+              </Reveal>
+              <Reveal delay={340} className="mt-10 flex flex-wrap gap-4">
+                <Link
+                  to="/designs"
+                  className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  Explore the collection
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center rounded-full border border-border bg-background/60 backdrop-blur-sm px-6 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:bg-secondary hover:-translate-y-0.5"
+                >
+                  Tell us your story
+                </Link>
+              </Reveal>
+            </div>
 
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/25" />
-          <div className="relative px-7 py-20 sm:px-14 sm:py-28 lg:py-36 max-w-2xl">
-            <Reveal variant="blur" className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
-              <Leaf className="h-3.5 w-3.5" /> All Natural — grown slowly, worn gently
-            </Reveal>
-            <Reveal as="h1" delay={100} className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.03] text-foreground">
-              Breathe Natural.
-              <br />
-              <em className="italic text-primary">Stay Comfortable.</em>
-            </Reveal>
-            <Reveal as="p" delay={220} className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-lg">
-              It starts in a field, not a factory. Linen, cotton and hemp, cut by hand and finished in
-              small batches — so what touches your skin still remembers where it came from. Soft on the
-              first morning. Softer on the thousandth.
-            </Reveal>
-            <Reveal delay={340} className="mt-10 flex flex-wrap gap-4">
-              <Link
-                to="/designs"
-                className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                Explore the collection
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center rounded-full border border-border bg-background/60 backdrop-blur-sm px-6 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:bg-secondary hover:-translate-y-0.5"
-              >
-                Tell us your story
-              </Link>
-            </Reveal>
+            {featured.length > 0 && (
+              <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full min-h-[320px] lg:min-h-[420px]">
+                {featured.slice(0, 3).map((d: any, i: number) => {
+                  const img = d.image_url ?? d.image_urls?.[0] ?? null;
+                  return (
+                    <Reveal
+                      key={d.id}
+                      variant="scale"
+                      delay={i * 120}
+                      className={i === 0 ? "row-span-2" : ""}
+                    >
+                      <Link
+                        to="/designs/$id"
+                        params={{ id: d.id }}
+                        className="group relative block h-full rounded-2xl overflow-hidden border border-border bg-secondary transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-xl"
+                      >
+                        <div className="h-full min-h-[140px]">
+                          {img ? (
+                            <img
+                              src={img}
+                              alt={d.title}
+                              loading="lazy"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                              <Leaf className="h-8 w-8 opacity-40" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 p-3 bg-gradient-to-t from-background/90 to-transparent">
+                          <p className="text-sm font-medium text-foreground truncate">{d.title}</p>
+                        </div>
+                      </Link>
+                    </Reveal>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
-
-        {featured.length > 0 && (
-          <div className="mt-10 grid grid-cols-3 gap-4 sm:gap-6">
-            {featured.slice(0, 3).map((d: any, i: number) => {
-              const img = d.image_url ?? d.image_urls?.[0] ?? null;
-              return (
-                <Reveal key={d.id} variant="scale" delay={i * 120}>
-                <Link
-                  to="/designs/$id"
-                  params={{ id: d.id }}
-                  className="group block rounded-2xl overflow-hidden border border-border bg-secondary transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-xl"
-                >
-                  <div className="aspect-[4/5]">
-                    {img ? (
-                      <img
-                        src={img}
-                        alt={d.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                        <Leaf className="h-8 w-8 opacity-40" />
-                      </div>
-                    )}
-                  </div>
-                </Link>
-                </Reveal>
-              );
-            })}
-          </div>
-        )}
       </section>
 
 
