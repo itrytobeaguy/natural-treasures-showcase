@@ -455,6 +455,46 @@ function Input({ label, value, onChange, type = "text" }: { label: string; value
 
 const PRESET_CATEGORIES = ["T-Shirts", "Sweatshirts/Hoodies", "Shorts", "Pants"];
 
+function CollectionInput({ value, options, onChange }: { value: string; options: string[]; onChange: (v: string) => void }) {
+  const [creating, setCreating] = useState(false);
+  return (
+    <label className="block">
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">Collection</span>
+      {creating ? (
+        <div className="mt-1 flex gap-2">
+          <input
+            autoFocus
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="New collection name"
+            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+          />
+          <button type="button" onClick={() => setCreating(false)} className="rounded-full border border-border px-4 py-2 text-xs whitespace-nowrap">
+            Pick existing
+          </button>
+        </div>
+      ) : (
+        <div className="mt-1 flex gap-2">
+          <select
+            value={options.includes(value) ? value : ""}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+          >
+            <option value="">No collection</option>
+            {options.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <button type="button" onClick={() => { onChange(""); setCreating(true); }} className="rounded-full border border-border px-4 py-2 text-xs whitespace-nowrap">
+            + New
+          </button>
+        </div>
+      )}
+    </label>
+  );
+}
+
 function CategoryInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
     <label className="block">
