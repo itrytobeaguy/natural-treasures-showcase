@@ -25,6 +25,7 @@ type Design = {
   image_url: string | null;
   image_urls: string[] | null;
   category: string | null;
+  collection: string | null;
   in_stock: boolean;
 };
 
@@ -35,7 +36,7 @@ function DesignsPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("designs")
-        .select("id, title, price, image_url, image_urls, category, in_stock")
+        .select("id, title, price, image_url, image_urls, category, collection, in_stock")
         .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as Design[];
@@ -45,26 +46,33 @@ function DesignsPage() {
   const [active, setActive] = useState<string>("All");
   const [q, setQ] = useState("");
   const [stock, setStock] = useState<"all" | "in" | "out">("all");
+  const [collection, setCollection] = useState<string>("All");
   const [sort, setSort] = useState<"default" | "az" | "price-asc" | "price-desc">("default");
   const categories = useMemo(() => {
     const set = new Set<string>();
     data?.forEach((d) => d.category && set.add(d.category));
     return ["All", ...Array.from(set).sort()];
   }, [data]);
+  const collections = useMemo(() => {
+    const set = new Set<string>();
+    data?.forEach((d) => d.collection && set.add(d.collection));
+    return ["All", ...Array.from(set).sort()];
+  }, [data]);
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     let list = (data ?? []).filter((d) => {
       if (active !== "All" && d.category !== active) return false;
+      if (collection !== "All" && d.collection !== collection) return false;
       if (stock === "in" && !d.in_stock) return false;
       if (stock === "out" && d.in_stock) return false;
-      if (term && !`${d.title} ${d.category ?? ""}`.toLowerCase().includes(term)) return false;
+      if (term && !`${d.title} ${d.category ?? ""} ${d.collection ?? ""}`.toLowerCase().includes(term)) return false;
       return true;
     });
     if (sort === "az") list = [...list].sort((a, b) => a.title.localeCompare(b.title));
     if (sort === "price-asc") list = [...list].sort((a, b) => Number(a.price) - Number(b.price));
     if (sort === "price-desc") list = [...list].sort((a, b) => Number(b.price) - Number(a.price));
     return list;
-  }, [data, active, q, stock, sort]);
+  }, [data, active, q, stock, sort, collection]);
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
@@ -97,6 +105,18 @@ function DesignsPage() {
           <option value="in">In stock</option>
           <option value="out">Unavailable</option>
         </select>
+        {collections.length > 1 && (
+          <select
+            value={collection}
+            onChange={(e) => setCollection(e.target.value)}
+            aria-label="Filter by collection"
+            className="rounded-full border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+          >
+            {collections.map((c) => (
+              <option key={c} value={c}>{c === "All" ? "All collections" : c}</option>
+            ))}
+          </select>
+        )}
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as typeof sort)}

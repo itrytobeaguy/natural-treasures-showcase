@@ -14,9 +14,31 @@ export type Database = {
   }
   public: {
     Tables: {
+      collections: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       designs: {
         Row: {
           category: string | null
+          collection: string | null
           created_at: string
           description: string | null
           id: string
@@ -30,6 +52,7 @@ export type Database = {
         }
         Insert: {
           category?: string | null
+          collection?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -43,6 +66,7 @@ export type Database = {
         }
         Update: {
           category?: string | null
+          collection?: string | null
           created_at?: string
           description?: string | null
           id?: string

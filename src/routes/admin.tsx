@@ -236,7 +236,22 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
   const [view, setView] = useState<"list" | "grid">("list");
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
+  const [coll, setColl] = useState("All");
   const [stock, setStock] = useState<"all" | "in" | "out">("all");
+  const qc2 = useQueryClient();
+  const collectionsQuery = useQuery({
+    queryKey: ["collections"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("collections").select("name").order("name");
+      if (error) throw error;
+      return data.map((c: any) => c.name as string);
+    },
+  });
+  const collectionNames = useMemo(() => {
+    const set = new Set<string>(collectionsQuery.data ?? []);
+    designs.forEach((d) => d.collection && set.add(d.collection));
+    return Array.from(set).sort();
+  }, [collectionsQuery.data, designs]);
 
   const categories = useMemo(() => {
     const set = new Set<string>();
@@ -248,12 +263,13 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
     const term = q.trim().toLowerCase();
     return designs.filter((d) => {
       if (cat !== "All" && d.category !== cat) return false;
+      if (coll !== "All" && d.collection !== coll) return false;
       if (stock === "in" && !d.in_stock) return false;
       if (stock === "out" && d.in_stock) return false;
-      if (term && !`${d.title ?? ""} ${d.category ?? ""} ${d.description ?? ""}`.toLowerCase().includes(term)) return false;
+      if (term && !`${d.title ?? ""} ${d.category ?? ""} ${d.collection ?? ""} ${d.description ?? ""}`.toLowerCase().includes(term)) return false;
       return true;
     });
-  }, [designs, q, cat, stock]);
+  }, [designs, q, cat, coll, stock]);
 
   async function save(d: any) {
     const extraImages: string[] = (d.image_urls_text ?? "")
@@ -267,9 +283,15 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
       image_url: d.image_url || null,
       image_urls: extraImages,
       category: d.category,
+      collection: d.collection?.trim() ? d.collection.trim() : null,
       in_stock: d.in_stock,
       sort_order: Number(d.sort_order) || 0,
     };
+    if (payload.collection && !collectionNames.includes(payload.collection)) {
+      const { error: cErr } = await supabase.from("collections").insert({ name: payload.collection });
+      if (cErr && !cErr.message.includes("duplicate")) return toast.error(cErr.message);
+      qc2.invalidateQueries({ queryKey: ["collections"] });
+    }
     if (d.id) {
       const { error } = await supabase.from("designs").update(payload).eq("id", d.id);
       if (error) return toast.error(error.message);
@@ -302,6 +324,11 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
         <div className="space-y-3">
           <Input label="Title" value={editingWithText.title ?? ""} onChange={(v) => setEditing({ ...editingWithText, title: v })} />
           <CategoryInput value={editingWithText.category ?? ""} onChange={(v) => setEditing({ ...editingWithText, category: v })} />
+          <CollectionInput
+            value={editingWithText.collection ?? ""}
+            options={collectionNames}
+            onChange={(v) => setEditing({ ...editingWithText, collection: v })}
+          />
           <Input label="Price" type="number" value={String(editingWithText.price ?? 0)} onChange={(v) => setEditing({ ...editingWithText, price: v })} />
           <Input label="Primary image URL (shown first)" value={editingWithText.image_url ?? ""} onChange={(v) => setEditing({ ...editingWithText, image_url: v })} />
           <label className="block">
@@ -359,6 +386,12 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
             <option key={c} value={c}>{c === "All" ? "All categories" : c}</option>
           ))}
         </select>
+        <select value={coll} onChange={(e) => setColl(e.target.value)} aria-label="Filter by collection" className="rounded-full border border-border bg-background px-4 py-2.5 text-sm">
+          <option value="All">All collections</option>
+          {collectionNames.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
         <select value={stock} onChange={(e) => setStock(e.target.value as typeof stock)} aria-label="Filter by availability" className="rounded-full border border-border bg-background px-4 py-2.5 text-sm">
           <option value="all">All availability</option>
           <option value="in">In stock</option>
@@ -376,7 +409,7 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
                 </div>
                 <div>
                   <p className="font-medium">{d.title}</p>
-                  <p className="text-xs text-muted-foreground">${Number(d.price).toFixed(2)} · {d.category ?? "—"} · {d.in_stock ? "in stock" : "unavailable"}</p>
+                  <p className="text-xs text-muted-foreground">${Number(d.price).toFixed(2)} · {d.category ?? "—"} · {d.collection ?? "no collection"} · {d.in_stock ? "in stock" : "unavailable"}</p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -396,6 +429,7 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
               <div className="p-3">
                 <p className="font-medium text-sm truncate">{d.title}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">${Number(d.price).toFixed(2)} · {d.category ?? "—"}</p>
+                <p className="text-xs text-muted-foreground">{d.collection ?? "no collection"}</p>
                 <p className="text-xs text-muted-foreground">{d.in_stock ? "in stock" : "unavailable"}</p>
                 <div className="flex gap-3 mt-2">
                   <button onClick={() => setEditing(d)} className="text-xs text-primary hover:underline">Edit</button>
@@ -420,6 +454,46 @@ function Input({ label, value, onChange, type = "text" }: { label: string; value
 }
 
 const PRESET_CATEGORIES = ["T-Shirts", "Sweatshirts/Hoodies", "Shorts", "Pants"];
+
+function CollectionInput({ value, options, onChange }: { value: string; options: string[]; onChange: (v: string) => void }) {
+  const [creating, setCreating] = useState(false);
+  return (
+    <label className="block">
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">Collection</span>
+      {creating ? (
+        <div className="mt-1 flex gap-2">
+          <input
+            autoFocus
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="New collection name"
+            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+          />
+          <button type="button" onClick={() => setCreating(false)} className="rounded-full border border-border px-4 py-2 text-xs whitespace-nowrap">
+            Pick existing
+          </button>
+        </div>
+      ) : (
+        <div className="mt-1 flex gap-2">
+          <select
+            value={options.includes(value) ? value : ""}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+          >
+            <option value="">No collection</option>
+            {options.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <button type="button" onClick={() => { onChange(""); setCreating(true); }} className="rounded-full border border-border px-4 py-2 text-xs whitespace-nowrap">
+            + New
+          </button>
+        </div>
+      )}
+    </label>
+  );
+}
 
 function CategoryInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
