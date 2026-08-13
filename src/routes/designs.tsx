@@ -190,6 +190,11 @@ function DesignsPage() {
                       {d.category}
                     </p>
                   )}
+                  {d.collection && (
+                    <span className="mt-2 inline-block rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] uppercase tracking-widest text-primary">
+                      {d.collection}
+                    </span>
+                  )}
                 </div>
                 <p className={hidePrices ? "text-xs text-muted-foreground max-w-[55%] text-right" : "text-sm"}>
                   {hidePrices ? <HiddenPriceText /> : `$${Number(d.price).toFixed(2)}`}
