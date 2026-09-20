@@ -15,8 +15,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
 import { ScrollProgress } from "@/components/ScrollProgress";
-import faviconAsset from "@/assets/favicon.png.asset.json";
-import logoAsset from "@/assets/natural-treasures-logo.png.asset.json";
+import faviconAsset from "@/assets/favicon.png";
+import logoAsset from "@/assets/natural-treasures-logo.png";
 
 function NotFoundComponent() {
   return (
@@ -95,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: faviconAsset.url, type: "image/png" },
+      { rel: "icon", href: faviconAsset, type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" } as any,
       {
@@ -187,7 +187,7 @@ function SiteHeader() {
     <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
       <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
         <Link to="/" aria-label="Natural Treasures — Home" className="flex items-center">
-          <img src={logoAsset.url} alt="Natural Treasures" className="h-10 w-auto" />
+          <img src={logoAsset} alt="Natural Treasures" className="h-10 w-auto" />
         </Link>
         <nav className="hidden sm:flex items-center gap-8 text-sm text-muted-foreground">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Home</Link>
