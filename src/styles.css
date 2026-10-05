@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Work Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
@@ -158,6 +158,136 @@
   h1, h2, h3, h4 {
     font-family: var(--font-serif);
     font-weight: 500;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
   }
+}
+
+/* Cool landscape themes: every surface and interaction shares these roles. */
+:root, [data-nature-theme="evergreen"] {
+  --radius: 0.5rem;
+  --background: oklch(0.978 0.005 170);
+  --foreground: oklch(0.28 0.028 168);
+  --card: oklch(0.994 0.002 170);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.44 0.05 169);
+  --primary-foreground: oklch(0.978 0.005 170);
+  --secondary: oklch(0.91 0.016 170);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.94 0.01 170);
+  --muted-foreground: oklch(0.46 0.025 170);
+  --accent: oklch(0.82 0.025 178);
+  --accent-foreground: var(--foreground);
+  --border: oklch(0.85 0.014 170);
+  --input: var(--border);
+  --ring: var(--primary);
+  --landscape-wash: oklch(0.88 0.033 169);
+  --dot-base: oklch(0.61 0.021 168);
+  --dot-rest: oklch(0.73 0.016 170);
+  --dot-hover: var(--primary);
+  --swatch-evergreen: oklch(0.44 0.05 169);
+  --swatch-ocean: oklch(0.57 0.048 210);
+  --swatch-mountain: oklch(0.51 0.028 235);
+  --swatch-foreground: oklch(0.978 0.005 170);
+  --shadow-frame: 0 16px 40px -18px oklch(0.28 0.028 168 / 0.3);
+  --shadow-lift: 0 24px 50px -18px oklch(0.28 0.028 168 / 0.4);
+}
+[data-nature-theme="ocean"] {
+  --background: oklch(0.972 0.009 210);
+  --foreground: oklch(0.29 0.033 214);
+  --card: oklch(0.993 0.004 210);
+  --primary: oklch(0.43 0.06 211);
+  --secondary: oklch(0.90 0.023 209);
+  --muted: oklch(0.935 0.017 211);
+  --muted-foreground: oklch(0.46 0.032 214);
+  --accent: oklch(0.78 0.045 209);
+  --border: oklch(0.84 0.023 209);
+  --landscape-wash: oklch(0.86 0.045 210);
+  --dot-base: oklch(0.61 0.035 211);
+  --dot-rest: oklch(0.73 0.025 211);
+}
+[data-nature-theme="mountain"] {
+  --background: oklch(0.965 0.008 235);
+  --foreground: oklch(0.28 0.025 235);
+  --card: oklch(0.99 0.004 235);
+  --primary: oklch(0.46 0.034 235);
+  --secondary: oklch(0.89 0.017 235);
+  --muted: oklch(0.925 0.012 235);
+  --muted-foreground: oklch(0.45 0.025 235);
+  --accent: oklch(0.79 0.026 235);
+  --border: oklch(0.83 0.018 235);
+  --landscape-wash: oklch(0.86 0.024 235);
+  --dot-base: oklch(0.60 0.023 235);
+  --dot-rest: oklch(0.72 0.017 235);
+}
+.site-atmosphere {
+  background: color-mix(in oklch, var(--landscape-wash) var(--journey-tint, 0%), var(--background));
+  transition: background-color 600ms ease;
+}
+.theme-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--swatch-foreground);
+  border: 3px solid var(--background);
+  transition: transform 200ms ease, outline-color 200ms ease;
+}
+.theme-swatch:hover { transform: translateY(-2px); }
+.theme-swatch[aria-pressed="true"] { outline: 1px solid var(--primary); }
+.theme-swatch-evergreen, .theme-swatch-evergreen:hover { background: var(--swatch-evergreen); }
+.theme-swatch-ocean, .theme-swatch-ocean:hover { background: var(--swatch-ocean); }
+.theme-swatch-mountain, .theme-swatch-mountain:hover { background: var(--swatch-mountain); }
+.nature-hero { min-height: min(740px, calc(100svh - 135px)); }
+.hero-veil { background: color-mix(in oklch, var(--background) 88%, transparent); }
+.nature-headline { cursor: default; }
+.nature-headline .headline-line {
+  display: inline-block;
+  position: relative;
+  transition: color 450ms ease, transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.headline-line::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 600ms ease;
+}
+.headline-line:hover { color: var(--primary); transform: translateX(5px) skewX(-3deg); }
+.headline-line:hover::after { transform: scaleX(1); }
+.headline-line em { transition: color 450ms ease; }
+.headline-line:hover em { color: var(--foreground); }
+.featured-collage { width: 420px; max-width: 100%; height: 480px; }
+.featured-frame { position: absolute; width: 220px; aspect-ratio: 1; box-shadow: var(--shadow-frame); }
+.featured-frame:nth-child(1) { top: 0; left: 30%; transform: rotate(-4deg); z-index: 10; }
+.featured-frame:nth-child(2) { top: 135px; left: 0; transform: rotate(-10deg); z-index: 20; }
+.featured-frame:nth-child(3) { top: 255px; right: 0; transform: rotate(6deg); z-index: 30; }
+.featured-frame:hover { z-index: 40; }
+.featured-link { box-shadow: var(--shadow-frame); }
+.featured-link:hover { box-shadow: var(--shadow-lift); }
+.story-image { transform: scale(1.04); }
+@supports (animation-timeline: view()) {
+  .story-image { animation: landscape-drift linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+  .story-rule { transform-origin: left; animation: growing-line linear both; animation-timeline: view(); animation-range: entry 10% cover 45%; }
+}
+@keyframes landscape-drift { from { transform: scale(1.15) translateY(-3%); } to { transform: scale(1.04) translateY(3%); } }
+@keyframes growing-line { from { transform: scaleX(0.15); } to { transform: scaleX(1); } }
+@media (max-width: 1023px) {
+  .nature-hero { min-height: 0; }
+  .featured-collage { width: 340px; height: 345px; }
+  .featured-frame { width: 168px; }
+  .featured-frame:nth-child(2) { top: 90px; }
+  .featured-frame:nth-child(3) { top: 175px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .site-atmosphere, .nature-headline .headline-line, .headline-line::after { transition: none; }
+  .story-image, .story-rule { animation: none; transform: none; }
+  .headline-line:hover { transform: none; }
+  .featured-link, .theme-swatch { transition: none; }
 }

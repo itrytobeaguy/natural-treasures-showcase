@@ -11,9 +11,12 @@ export const Route = createFileRoute("/designs_/$id")({
   component: DesignDetail,
   head: ({ params }) => ({
     meta: [
-      { title: `Design — Natural Treasures` },
+      { title: `Design ${params.id} — Natural Treasures` },
       { name: "description", content: "Take a closer look at this design and inquire about it." },
-      { property: "og:title", content: `Design ${params.id}` },
+      { property: "og:title", content: `Design ${params.id} — Natural Treasures` },
+      { property: "og:description", content: "Explore this Natural Treasures piece, see its photos and send an inquiry." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });

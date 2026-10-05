@@ -12,6 +12,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in or create an account." },
       { property: "og:title", content: "Account — Natural Treasures" },
       { property: "og:description", content: "Sign in or create an account." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });

@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMemo } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
 import { Reveal } from "@/components/Reveal";
+import { Button } from "@/components/ui/button";
 import { useParallax } from "@/hooks/useParallax";
 import heroImage from "@/assets/hero-natural.jpg";
 import cardFibers from "@/assets/card-fibers.jpg";
@@ -19,6 +20,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Quietly made clothing rooted in nature. Discover our current pieces." },
       { property: "og:title", content: "Natural Treasures" },
       { property: "og:description", content: "Quietly made clothing rooted in nature." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
@@ -49,8 +52,8 @@ function Home() {
 
   return (
     <div>
-      <section className="mx-auto max-w-6xl px-6 pt-16 pb-28">
-        <div ref={hero.ref} className="relative overflow-hidden rounded-3xl border border-border bg-secondary">
+      <section className="pb-16 pt-6 sm:pt-10">
+        <div ref={hero.ref} className="nature-hero relative overflow-hidden">
           <img
             src={heroImage}
             alt="Model wearing the Yosemite National Park tee from Natural Treasures in a misty pine forest"
@@ -59,16 +62,16 @@ function Home() {
             style={{ transform: `translate3d(0, ${hero.offset}px, 0) scale(1.12)` }}
             className="absolute inset-0 h-full w-full object-cover object-[70%_center] will-change-transform"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/70" />
-          <div className="relative grid lg:grid-cols-2 gap-12 lg:gap-16 px-7 py-20 sm:px-14 sm:py-28 lg:py-24 items-center">
+          <div className="hero-veil absolute inset-0" />
+          <div className="relative mx-auto max-w-7xl grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 px-6 py-12 sm:px-12 sm:py-16 lg:py-20 items-center">
             <div className="max-w-xl">
               <Reveal variant="blur" className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
                 <Leaf className="h-3.5 w-3.5" /> All Natural — grown slowly, worn gently
               </Reveal>
-              <Reveal as="h1" delay={100} className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.03] text-foreground">
-                Breathe Natural.
+              <Reveal as="h1" delay={100} className="nature-headline font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.08] text-foreground">
+                <span className="headline-line">Breathe Natural.</span>
                 <br />
-                <em className="italic text-primary">Stay Comfortable.</em>
+                <span className="headline-line"><em className="italic text-primary">Stay Comfortable.</em></span>
               </Reveal>
               <Reveal as="p" delay={220} className="mt-8 text-lg text-muted-foreground leading-relaxed max-w-lg">
                 It starts in a field, not a factory. Linen, cotton and hemp, cut by hand and finished in
@@ -76,42 +79,29 @@ function Home() {
                 first morning. Softer on the thousandth.
               </Reveal>
               <Reveal delay={340} className="mt-10 flex flex-wrap gap-4">
-                <Link
-                  to="/designs"
-                  className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-lg"
-                >
+                <Button asChild className="h-12 rounded-full px-6 transition-transform hover:-translate-y-0.5"><Link to="/designs">
                   Explore the collection
-                </Link>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center rounded-full border border-border bg-background/60 backdrop-blur-sm px-6 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:bg-secondary hover:-translate-y-0.5"
-                >
+                </Link></Button>
+                <Button asChild variant="outline" className="h-12 rounded-full px-6 bg-background/60 backdrop-blur-sm"><Link to="/contact">
                   Tell us your story
-                </Link>
+                </Link></Button>
               </Reveal>
             </div>
 
             {featured.length > 0 && (
-              <div className="relative flex flex-col items-center justify-center h-full min-h-[320px] lg:min-h-[420px] py-4">
+              <div className="featured-collage relative mx-auto">
                 {featured.slice(0, 3).map((d: any, i: number) => {
                   const img = d.image_url ?? d.image_urls?.[0] ?? null;
-                  const rotations = ["-2deg", "2deg", "-1deg"];
-                  const zIndexes = [10, 20, 30];
                   return (
                     <div
                       key={d.id}
-                      className="w-40 sm:w-44 lg:w-52 aspect-square"
-                      style={{
-                        marginTop: i === 0 ? "0" : "-2rem",
-                        transform: `rotate(${rotations[i]})`,
-                        zIndex: zIndexes[i],
-                      }}
+                      className="featured-frame"
                     >
                       <Reveal variant="scale" delay={i * 120} className="h-full w-full">
                         <Link
                           to="/designs/$id"
                           params={{ id: d.id }}
-                          className="group relative block h-full w-full rounded-2xl overflow-hidden border border-border bg-secondary shadow-lg transition-all duration-300 hover:scale-[1.06] hover:z-50 hover:rotate-0 hover:shadow-xl"
+                          className="featured-link group relative block h-full w-full rounded-lg overflow-hidden border-[6px] border-card bg-card transition-all duration-500 hover:scale-[1.06] hover:-translate-y-2"
                         >
                           {img ? (
                             <img
@@ -140,7 +130,7 @@ function Home() {
       </section>
 
 
-      <section className="mx-auto max-w-6xl px-6 pb-32">
+      <section className="mx-auto max-w-7xl px-6 sm:px-12 pb-24">
         <div className="grid sm:grid-cols-3 gap-8">
           {([
             { t: "Natural fibers", d: "Linen, cotton, hemp — chosen for how they age.", img: cardFibers, alt: "Person wearing a natural linen tee in a field of tall grass" },
@@ -151,7 +141,8 @@ function Home() {
               key={f.t}
               variant={i === 1 ? "up" : "blur"}
               delay={i * 150}
-              className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:scale-[1.03] hover:bg-accent/40 hover:border-primary/40 hover:shadow-lg"
+              once={false}
+              className="group overflow-hidden rounded-lg border border-border bg-card transition-all duration-300 hover:-translate-y-2 hover:bg-accent/40 hover:border-primary/40"
             >
               <div className="aspect-[4/3] overflow-hidden bg-secondary">
                 <img
@@ -160,10 +151,11 @@ function Home() {
                   loading="lazy"
                   width={1024}
                   height={768}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                  className="story-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                 />
               </div>
               <div className="p-8">
+                <div aria-hidden="true" className="story-rule mb-5 h-px w-12 bg-primary/50" />
                 <h3 className="font-serif text-2xl">{f.t}</h3>
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.d}</p>
               </div>
@@ -174,7 +166,7 @@ function Home() {
 
       {(designs?.length ?? 0) > 0 && (
         <section className="mx-auto max-w-6xl px-6 pb-32">
-          <Reveal className="flex items-end justify-between mb-10">
+          <Reveal once={false} className="flex flex-wrap gap-4 items-end justify-between mb-10">
             <h2 className="font-serif text-4xl">The collection</h2>
             <Link to="/designs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Browse every design →
@@ -184,7 +176,7 @@ function Home() {
             {(designs ?? []).slice(0, 6).map((d: any, i: number) => {
               const img = d.image_url ?? d.image_urls?.[0] ?? null;
               return (
-                <Reveal key={d.id} variant="up" delay={(i % 3) * 120}>
+                <Reveal key={d.id} once={false} variant={i % 3 === 1 ? "scale" : "up"} delay={(i % 3) * 120}>
                 <Link
                   to="/designs/$id"
                   params={{ id: d.id }}

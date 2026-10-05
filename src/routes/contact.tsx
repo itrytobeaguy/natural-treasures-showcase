@@ -10,6 +10,8 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Get in touch with Natural Treasures." },
       { property: "og:title", content: "Contact — Natural Treasures" },
       { property: "og:description", content: "Get in touch." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
