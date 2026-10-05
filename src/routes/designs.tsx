@@ -14,6 +14,8 @@ export const Route = createFileRoute("/designs")({
       { name: "description", content: "Browse the current collection of Natural Treasures pieces." },
       { property: "og:title", content: "Designs — Natural Treasures" },
       { property: "og:description", content: "Browse the current collection." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });

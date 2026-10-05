@@ -13,6 +13,10 @@ export const Route = createFileRoute("/admin")({
       { title: "Admin — Natural Treasures" },
       { name: "description", content: "Admin dashboard." },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Admin — Natural Treasures" },
+      { property: "og:description", content: "Manage Natural Treasures products and inquiries." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });

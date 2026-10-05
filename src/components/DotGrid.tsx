@@ -27,6 +27,20 @@ export function DotGrid() {
     const MAX_RADIUS = 4.5;
     const INFLUENCE = 130; // px
 
+    const colorCanvas = document.createElement("canvas");
+    colorCanvas.width = colorCanvas.height = 1;
+    const colorContext = colorCanvas.getContext("2d", { willReadFrequently: true });
+    const readColor = (name: string): number[] => {
+      if (!colorContext) return [140, 140, 135];
+      colorContext.clearRect(0, 0, 1, 1);
+      colorContext.fillStyle = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      colorContext.fillRect(0, 0, 1, 1);
+      return Array.from(colorContext.getImageData(0, 0, 1, 1).data).slice(0, 3);
+    };
+    let baseColor = readColor("--dot-base");
+    let restColor = readColor("--dot-rest");
+    let hoverColor = readColor("--dot-hover");
+
     let width = 0;
     let height = 0;
     let dpr = window.devicePixelRatio || 1;
@@ -69,9 +83,7 @@ export function DotGrid() {
 
           let radius = BASE_RADIUS;
           // base muted gray, always visible
-          let r = 140;
-          let g = 140;
-          let b = 135;
+          let [r, g, b] = baseColor;
           let a = 0.55;
 
           if (active) {
@@ -82,10 +94,9 @@ export function DotGrid() {
               const t = 1 - Math.sqrt(dist2) / INFLUENCE; // 0..1
               const ease = t * t;
               radius = BASE_RADIUS + (MAX_RADIUS - BASE_RADIUS) * ease;
-              // toward forest green oklch(0.42 0.055 145) ~ #4a6b4a
-              r = Math.round(180 + (74 - 180) * ease);
-              g = Math.round(180 + (107 - 180) * ease);
-              b = Math.round(170 + (74 - 170) * ease);
+              r = Math.round(restColor[0] + (hoverColor[0] - restColor[0]) * ease);
+              g = Math.round(restColor[1] + (hoverColor[1] - restColor[1]) * ease);
+              b = Math.round(restColor[2] + (hoverColor[2] - restColor[2]) * ease);
               a = 0.35 + 0.55 * ease;
             }
           }
@@ -125,6 +136,14 @@ export function DotGrid() {
       schedule();
     };
 
+    const themeObserver = new MutationObserver(() => {
+      baseColor = readColor("--dot-base");
+      restColor = readColor("--dot-rest");
+      hoverColor = readColor("--dot-hover");
+      schedule();
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-nature-theme", "class"] });
+
     resize();
     scrollRef.current.x = window.scrollX;
     scrollRef.current.y = window.scrollY;
@@ -137,6 +156,7 @@ export function DotGrid() {
     window.addEventListener("resize", onResize);
 
     return () => {
+      themeObserver.disconnect();
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
       window.removeEventListener("blur", onLeave);
