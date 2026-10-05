@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { NatureThemes, ScrollAtmosphere } from "@/components/NatureThemes";
 import faviconAsset from "@/assets/favicon.png";
 import logoAsset from "@/assets/natural-treasures-logo.png";
 
@@ -100,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" } as any,
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap",
       },
     ],
   }),
@@ -150,7 +151,8 @@ function RootComponent() {
 
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="site-atmosphere min-h-screen flex flex-col">
+      <ScrollAtmosphere />
       <DotGrid />
       <ScrollProgress />
       <div className="relative z-10 flex flex-col min-h-screen">
@@ -185,11 +187,13 @@ function SiteHeader() {
 
   return (
     <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
-      <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between">
+      <div className="mx-auto max-w-7xl px-5 py-4 flex flex-wrap gap-4 items-center justify-between">
         <Link to="/" aria-label="Natural Treasures — Home" className="flex items-center">
           <img src={logoAsset} alt="Natural Treasures" className="h-10 w-auto" />
+          <span className="ml-3 font-serif text-xl hidden md:block">Natural Treasures</span>
         </Link>
-        <nav className="hidden sm:flex items-center gap-8 text-sm text-muted-foreground">
+        <div className="flex items-center gap-5">
+        <nav className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Home</Link>
           <Link to="/designs" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Products</Link>
           <Link to="/contact" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Contact</Link>
@@ -197,6 +201,12 @@ function SiteHeader() {
           {isAdmin && (
             <Link to="/admin" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Admin</Link>
           )}
+        </nav>
+        <NatureThemes />
+        </div>
+        <nav aria-label="Mobile navigation" className="sm:hidden w-full flex justify-between text-xs text-muted-foreground">
+          <Link to="/">Home</Link><Link to="/designs">Products</Link><Link to="/contact">Contact</Link><Link to="/auth">Account</Link>
+          {isAdmin && <Link to="/admin">Admin</Link>}
         </nav>
       </div>
     </header>

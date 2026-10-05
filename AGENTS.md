@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Nature appearance is controlled by semantic CSS tokens and a root data-nature-theme attribute, with visitor choice restored after hydration; this keeps SSR stable and all pages consistent.
+- Scroll atmosphere and the theme picker live in NatureThemes; dot geometry remains independent, while its colors resolve global theme tokens.
