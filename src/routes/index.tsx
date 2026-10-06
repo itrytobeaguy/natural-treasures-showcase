@@ -52,7 +52,7 @@ function Home() {
 
   return (
     <div>
-      <section className="pb-16 pt-6 sm:pt-10">
+      <section className="pb-16">
         <div ref={hero.ref} className="nature-hero relative overflow-hidden">
           <img
             src={heroImage}
@@ -63,7 +63,7 @@ function Home() {
             className="absolute inset-0 h-full w-full object-cover object-[70%_center] will-change-transform"
           />
           <div className="hero-veil absolute inset-0" />
-          <div className="relative mx-auto max-w-7xl grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 px-6 py-12 sm:px-12 sm:py-16 lg:py-20 items-center">
+          <div className="relative mx-auto max-w-7xl grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 px-6 pt-8 sm:px-12 sm:pt-10 lg:pt-12 pb-12 sm:pb-16 lg:pb-20 items-center">
             <div className="max-w-xl">
               <Reveal variant="blur" className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-8">
                 <Leaf className="h-3.5 w-3.5" /> All Natural — grown slowly, worn gently
