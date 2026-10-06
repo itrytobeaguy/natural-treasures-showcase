@@ -16,7 +16,6 @@ import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { NatureThemes, ScrollAtmosphere } from "@/components/NatureThemes";
-import faviconAsset from "@/assets/favicon.png";
 import logoAsset from "@/assets/natural-treasures-logo.png";
 
 function NotFoundComponent() {
