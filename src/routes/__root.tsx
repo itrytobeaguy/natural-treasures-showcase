@@ -16,7 +16,6 @@ import { Toaster } from "sonner";
 import { DotGrid } from "@/components/DotGrid";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { NatureThemes, ScrollAtmosphere } from "@/components/NatureThemes";
-import faviconAsset from "@/assets/favicon.png";
 import logoAsset from "@/assets/natural-treasures-logo.png";
 
 function NotFoundComponent() {
@@ -96,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: faviconAsset, type: "image/png" },
+      { rel: "icon", href: logoAsset, type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" } as any,
       {
