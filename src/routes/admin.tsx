@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 import { useHidePrices } from "@/hooks/useHidePrices";
+import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -242,6 +244,7 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
   const [cat, setCat] = useState("All");
   const [coll, setColl] = useState("All");
   const [stock, setStock] = useState<"all" | "in" | "out">("all");
+  const [visibilityPending, setVisibilityPending] = useState<Set<string>>(new Set());
   const qc2 = useQueryClient();
   const collectionsQuery = useQuery({
     queryKey: ["collections"],
@@ -313,6 +316,42 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
     const { error } = await supabase.from("designs").delete().eq("id", id);
     if (error) toast.error(error.message);
     else { toast.success("Deleted"); onChange(); }
+  }
+
+  async function toggleVisibility(d: any) {
+    if (visibilityPending.has(d.id)) return;
+    setVisibilityPending((pending) => new Set(pending).add(d.id));
+    try {
+      const { data, error } = await supabase.from("designs")
+        .update({ is_hidden: !d.is_hidden }).eq("id", d.id).select("id").single();
+      if (error || !data) throw error ?? new Error("Product could not be updated");
+      toast.success(d.is_hidden ? "Product visible in the shop" : "Product hidden from the shop");
+      await qc2.invalidateQueries({ queryKey: ["admin-designs"] });
+      await Promise.all([
+        qc2.invalidateQueries({ queryKey: ["designs"] }),
+        qc2.invalidateQueries({ queryKey: ["featured-designs"] }),
+        qc2.invalidateQueries({ queryKey: ["design", d.id] }),
+      ]);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not change product visibility");
+    } finally {
+      setVisibilityPending((pending) => {
+        const next = new Set(pending);
+        next.delete(d.id);
+        return next;
+      });
+    }
+  }
+
+  function visibilityControl(d: any) {
+    return (
+      <Button variant="outline" size="sm" disabled={visibilityPending.has(d.id)}
+        onClick={() => toggleVisibility(d)} aria-label={`${d.is_hidden ? "Show" : "Hide"} product: ${d.title}`}
+        aria-pressed={Boolean(d.is_hidden)} title={d.is_hidden ? "Show in the shop" : "Hide from the shop"}>
+        {d.is_hidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+        {d.is_hidden ? "Show product" : "Hide product"}
+      </Button>
+    );
   }
 
   if (editing) {
@@ -406,17 +445,19 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
       {view === "list" ? (
         <div className="space-y-2">
           {filtered.map((d) => (
-            <div key={d.id} className="rounded-xl border border-border bg-card p-4 flex justify-between items-center">
+            <div key={d.id} className="rounded-xl border border-border bg-card p-4 flex flex-wrap gap-3 justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-lg overflow-hidden bg-secondary flex-shrink-0">
                   {d.image_url ? <img src={d.image_url} alt={d.title} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
                 </div>
                 <div>
                   <p className="font-medium">{d.title}</p>
+                  {d.is_hidden && <p className="text-xs text-muted-foreground">Hidden from shop</p>}
                   <p className="text-xs text-muted-foreground">${Number(d.price).toFixed(2)} · {d.category ?? "—"} · {d.collection ?? "no collection"} · {d.in_stock ? "in stock" : "unavailable"}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                {visibilityControl(d)}
                 <button onClick={() => setEditing(d)} className="text-sm text-primary hover:underline">Edit</button>
                 <button onClick={() => remove(d.id)} className="text-sm text-destructive hover:underline">Delete</button>
               </div>
@@ -432,10 +473,12 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
               </div>
               <div className="p-3">
                 <p className="font-medium text-sm truncate">{d.title}</p>
+                {d.is_hidden && <p className="text-xs text-muted-foreground">Hidden from shop</p>}
                 <p className="text-xs text-muted-foreground mt-0.5">${Number(d.price).toFixed(2)} · {d.category ?? "—"}</p>
                 <p className="text-xs text-muted-foreground">{d.collection ?? "no collection"}</p>
                 <p className="text-xs text-muted-foreground">{d.in_stock ? "in stock" : "unavailable"}</p>
-                <div className="flex gap-3 mt-2">
+                <div className="flex flex-wrap items-center gap-3 mt-2">
+                  {visibilityControl(d)}
                   <button onClick={() => setEditing(d)} className="text-xs text-primary hover:underline">Edit</button>
                   <button onClick={() => remove(d.id)} className="text-xs text-destructive hover:underline">Delete</button>
                 </div>

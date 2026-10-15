@@ -35,6 +35,7 @@ function Home() {
       const { data, error } = await supabase
         .from("designs")
         .select("id, title, price, image_url, image_urls, category, in_stock")
+        .eq("is_hidden", false)
         .eq("in_stock", true);
       if (error) throw error;
       return data ?? [];
