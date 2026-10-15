@@ -37,7 +37,7 @@ function DesignDetail() {
   const { data: design, isLoading } = useQuery({
     queryKey: ["design", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("designs").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase.from("designs").select("*").eq("id", id).eq("is_hidden", false).maybeSingle();
       if (error) throw error;
       return data;
     },

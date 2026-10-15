@@ -39,6 +39,7 @@ function DesignsPage() {
       const { data, error } = await supabase
         .from("designs")
         .select("id, title, price, image_url, image_urls, category, collection, in_stock")
+        .eq("is_hidden", false)
         .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as Design[];

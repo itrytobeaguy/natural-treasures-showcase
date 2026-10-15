@@ -11,3 +11,4 @@
 
 - Nature appearance is controlled by semantic CSS tokens and a root data-nature-theme attribute, with visitor choice restored after hydration; this keeps SSR stable and all pages consistent.
 - Scroll atmosphere and the theme picker live in NatureThemes; dot geometry remains independent, while its colors resolve global theme tokens.
+- Product visibility uses a dedicated flag separate from stock: public queries and read policies exclude hidden products, while existing admin role policies retain management access.

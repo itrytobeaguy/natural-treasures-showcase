@@ -45,6 +45,7 @@ export type Database = {
           image_url: string | null
           image_urls: string[]
           in_stock: boolean
+          is_hidden: boolean
           price: number
           sort_order: number
           title: string
@@ -59,6 +60,7 @@ export type Database = {
           image_url?: string | null
           image_urls?: string[]
           in_stock?: boolean
+          is_hidden?: boolean
           price?: number
           sort_order?: number
           title: string
@@ -73,6 +75,7 @@ export type Database = {
           image_url?: string | null
           image_urls?: string[]
           in_stock?: boolean
+          is_hidden?: boolean
           price?: number
           sort_order?: number
           title?: string
