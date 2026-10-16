@@ -40,7 +40,7 @@ export function DotGrid() {
     let baseColor = readColor("--dot-base");
     let restColor = readColor("--dot-rest");
     let hoverColor = readColor("--dot-hover");
-    const footer = document.querySelector("footer");
+    let interactive = document.documentElement.dataset.mouseInteraction !== "off";
 
     let width = 0;
     let height = 0;
@@ -64,8 +64,7 @@ export function DotGrid() {
       // Cursor position in document coords
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
-      const active = mouseRef.current.active;
-      const footerTop = footer?.getBoundingClientRect().top ?? height;
+      const active = mouseRef.current.active && interactive;
 
       const sx = scrollRef.current.x;
       const sy = scrollRef.current.y;
@@ -88,7 +87,7 @@ export function DotGrid() {
           let [r, g, b] = baseColor;
           let a = 0.55;
 
-          if (active && screenY < footerTop) {
+          if (active) {
             const ddx = dx - mx;
             const ddy = dy - my;
             const dist2 = ddx * ddx + ddy * ddy;
@@ -119,7 +118,7 @@ export function DotGrid() {
     const onMove = (e: MouseEvent) => {
       mouseRef.current.x = e.clientX + window.scrollX;
       mouseRef.current.y = e.clientY + window.scrollY;
-      mouseRef.current.active = !(e.target instanceof Element && e.target.closest("footer"));
+      mouseRef.current.active = interactive;
       schedule();
     };
     const onLeave = () => {
@@ -139,12 +138,13 @@ export function DotGrid() {
     };
 
     const themeObserver = new MutationObserver(() => {
+      interactive = document.documentElement.dataset.mouseInteraction !== "off";
       baseColor = readColor("--dot-base");
       restColor = readColor("--dot-rest");
       hoverColor = readColor("--dot-hover");
       schedule();
     });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-nature-theme", "class"] });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-nature-theme", "data-mouse-interaction", "class"] });
 
     resize();
     scrollRef.current.x = window.scrollX;
