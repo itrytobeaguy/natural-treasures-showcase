@@ -1,18 +1,20 @@
+import { displayText } from "@/lib/display-text";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Leaf, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useHidePrices, HiddenPriceText } from "@/hooks/useHidePrices";
+import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/Reveal";
 
 export const Route = createFileRoute("/designs")({
   component: DesignsPage,
   head: () => ({
     meta: [
-      { title: "Designs — Natural Treasures" },
+      { title: "Designs | Natural Treasures" },
       { name: "description", content: "Browse the current collection of Natural Treasures pieces." },
-      { property: "og:title", content: "Designs — Natural Treasures" },
+      { property: "og:title", content: "Designs | Natural Treasures" },
       { property: "og:description", content: "Browse the current collection." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -68,7 +70,7 @@ function DesignsPage() {
       if (collection !== "All" && d.collection !== collection) return false;
       if (stock === "in" && !d.in_stock) return false;
       if (stock === "out" && d.in_stock) return false;
-      if (term && !`${d.title} ${d.category ?? ""} ${d.collection ?? ""}`.toLowerCase().includes(term)) return false;
+      if (term && !`${displayText(d.title)} ${d.category ?? ""} ${d.collection ?? ""}`.toLowerCase().includes(term)) return false;
       return true;
     });
     if (sort === "az") list = [...list].sort((a, b) => a.title.localeCompare(b.title));
@@ -82,7 +84,7 @@ function DesignsPage() {
       <Reveal variant="blur" className="mb-14 max-w-xl">
         <h1 className="font-serif text-5xl">The collection</h1>
         <p className="mt-4 text-muted-foreground">
-          Each piece is made in small quantities. Tap one to see details and place an order.
+          
         </p>
       </Reveal>
 
@@ -95,14 +97,14 @@ function DesignsPage() {
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search designs…"
             aria-label="Search designs"
-            className="w-full rounded-full border border-border bg-background/70 pl-10 pr-4 py-2.5 text-sm outline-none focus:border-primary/50"
+            className="w-full rounded-none border border-border bg-background/70 pl-10 pr-4 py-2.5 text-sm outline-none focus:border-primary/50"
           />
         </div>
         <select
           value={stock}
           onChange={(e) => setStock(e.target.value as typeof stock)}
           aria-label="Availability"
-          className="rounded-full border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+          className="rounded-none border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
         >
           <option value="all">All availability</option>
           <option value="in">In stock</option>
@@ -113,7 +115,7 @@ function DesignsPage() {
             value={collection}
             onChange={(e) => setCollection(e.target.value)}
             aria-label="Filter by collection"
-            className="rounded-full border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+            className="rounded-none border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
           >
             {collections.map((c) => (
               <option key={c} value={c}>{c === "All" ? "All collections" : c}</option>
@@ -124,7 +126,7 @@ function DesignsPage() {
           value={sort}
           onChange={(e) => setSort(e.target.value as typeof sort)}
           aria-label="Sort designs"
-          className="rounded-full border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
+          className="rounded-none border border-border bg-background/70 px-4 py-2.5 text-sm outline-none focus:border-primary/50"
         >
           <option value="default">Featured order</option>
           <option value="az">Name A–Z</option>
@@ -138,17 +140,17 @@ function DesignsPage() {
           {categories.map((c) => {
             const isActive = c === active;
             return (
-              <button
+              <Button variant="ghost"
                 key={c}
                 onClick={() => setActive(c)}
-                className={`rounded-full px-4 py-2 text-xs uppercase tracking-widest border transition-all ${
+                className={`rounded-none px-4 py-2 text-xs uppercase tracking-widest border transition-all ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary"
                     : "bg-background/60 border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
                 }`}
               >
                 {c}
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -157,7 +159,7 @@ function DesignsPage() {
       {isLoading ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="aspect-[4/5] rounded-2xl bg-muted animate-pulse" />
+            <div key={i} className="aspect-[4/5] shrink-0 rounded-none bg-muted animate-pulse" />
           ))}
         </div>
       ) : (
@@ -166,17 +168,17 @@ function DesignsPage() {
             <p className="text-muted-foreground col-span-full">No designs match your search.</p>
           )}
           {filtered.map((d, i) => (
-            <Reveal key={d.id} variant="up" delay={(i % 3) * 110}>
+            <Reveal key={d.id} variant="up" delay={(i % 3) * 110} className="h-full">
             <Link
               to="/designs/$id"
               params={{ id: d.id }}
-              className="group block"
+              className="product-card group flex h-full flex-col"
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border relative transition-all duration-300 group-hover:scale-[1.03] group-hover:bg-accent/50 group-hover:border-primary/40 group-hover:shadow-lg">
-                {d.image_url ? (
+              <div className="aspect-[4/5] shrink-0 rounded-none overflow-hidden bg-secondary border border-border relative transition-all duration-300 group-hover:scale-[1.03] group-hover:bg-accent/50 group-hover:border-primary/40 group-hover:shadow-lg">
+                {(d.image_url || d.image_urls?.[0]) ? (
                   <img
-                    src={d.image_url}
-                    alt={d.title}
+                    src={d.image_url || d.image_urls?.[0] || ""}
+                    alt={displayText(d.title)}
                     className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                   />
                 ) : (
@@ -185,21 +187,21 @@ function DesignsPage() {
                   </div>
                 )}
               </div>
-              <div className="mt-4 flex justify-between items-baseline">
+              <div className="product-info mt-4 flex flex-1 flex-col">
                 <div>
-                  <h3 className="font-serif text-xl">{d.title}</h3>
+                  <h3 className="product-title line-clamp-2 text-lg">{displayText(d.title)}</h3>
                   {d.category && (
                     <p className="text-xs uppercase tracking-widest text-muted-foreground mt-1">
-                      {d.category}
+                      {displayText(d.category)}
                     </p>
                   )}
                   {d.collection && (
-                    <span className="mt-2 inline-block rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] uppercase tracking-widest text-primary">
-                      {d.collection}
+                    <span className="mt-2 inline-block rounded-none border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] uppercase tracking-widest text-primary">
+                      {displayText(d.collection)}
                     </span>
                   )}
                 </div>
-                <p className={hidePrices ? "text-xs text-muted-foreground max-w-[55%] text-right" : "text-sm"}>
+                <p className="mt-auto pt-4 text-sm text-muted-foreground">
                   {hidePrices ? <HiddenPriceText /> : `$${Number(d.price).toFixed(2)}`}
                 </p>
               </div>

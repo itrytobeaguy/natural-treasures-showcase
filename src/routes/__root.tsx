@@ -83,7 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Natural Treasures — Nature-inspired clothing" },
+      { title: "Natural Treasures | Nature-inspired clothing" },
       { name: "description", content: "Handmade, nature-inspired clothing. Quiet pieces for everyday wear." },
       { property: "og:title", content: "Natural Treasures" },
       { property: "og:description", content: "Handmade, nature-inspired clothing. Quiet pieces for everyday wear." },
@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" } as any,
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -157,7 +157,6 @@ function SiteLayout({ children }: { children: ReactNode }) {
       <div className="relative z-10 flex flex-col min-h-screen">
         <SiteHeader />
         <main className="flex-1">{children}</main>
-        <SiteFooter />
       </div>
     </div>
   );
@@ -187,7 +186,7 @@ function SiteHeader() {
   return (
     <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
       <div className="mx-auto max-w-7xl px-5 py-4 flex flex-wrap gap-4 items-center justify-between">
-        <Link to="/" aria-label="Natural Treasures — Home" className="flex items-center">
+        <Link to="/" aria-label="Natural Treasures | Home" className="flex items-center">
           <img src={logoAsset} alt="Natural Treasures" className="h-10 w-auto" />
           <span className="ml-3 font-serif text-xl hidden md:block">Natural Treasures</span>
         </Link>
@@ -196,7 +195,6 @@ function SiteHeader() {
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Home</Link>
           <Link to="/designs" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Products</Link>
           <Link to="/contact" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Contact</Link>
-          <Link to="/auth" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Account</Link>
           {isAdmin && (
             <Link to="/admin" activeProps={{ className: "text-foreground" }} className="hover:text-foreground transition-colors">Admin</Link>
           )}
@@ -204,22 +202,10 @@ function SiteHeader() {
         <NatureThemes />
         </div>
         <nav aria-label="Mobile navigation" className="sm:hidden w-full flex justify-between text-xs text-muted-foreground">
-          <Link to="/">Home</Link><Link to="/designs">Products</Link><Link to="/contact">Contact</Link><Link to="/auth">Account</Link>
+          <Link to="/">Home</Link><Link to="/designs">Products</Link><Link to="/contact">Contact</Link>
           {isAdmin && <Link to="/admin">Admin</Link>}
         </nav>
       </div>
     </header>
-  );
-}
-
-function SiteFooter() {
-  return (
-    <footer className="border-t border-border/60 mt-24">
-      <div className="mx-auto max-w-6xl px-6 py-10 flex flex-col sm:flex-row gap-4 items-center justify-between text-sm text-muted-foreground">
-        <p className="font-serif text-base text-foreground">Natural Treasures</p>
-        <p>© {new Date().getFullYear()} — Grown slowly, worn gently.</p>
-        <Link to="/admin" className="hover:text-foreground transition-colors">Admin</Link>
-      </div>
-    </footer>
   );
 }

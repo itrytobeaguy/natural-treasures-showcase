@@ -6,9 +6,9 @@ export const Route = createFileRoute("/contact")({
   component: Contact,
   head: () => ({
     meta: [
-      { title: "Contact — Natural Treasures" },
+      { title: "Contact | Natural Treasures" },
       { name: "description", content: "Get in touch with Natural Treasures." },
-      { property: "og:title", content: "Contact — Natural Treasures" },
+      { property: "og:title", content: "Contact | Natural Treasures" },
       { property: "og:description", content: "Get in touch." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -19,10 +19,9 @@ export const Route = createFileRoute("/contact")({
 function Contact() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-24">
-      <Reveal as="h1" variant="blur" className="font-serif text-5xl">Say hello</Reveal>
+      <Reveal as="h1" variant="blur" className="font-serif text-5xl">Reach out</Reveal>
       <Reveal as="p" delay={120} className="mt-6 text-muted-foreground leading-relaxed max-w-xl">
-        For custom pieces, questions about sizing, or anything else — reach out. We reply as soon as
-        we can.
+        Contact us if you have an order, if you have any inquiries about designs, sizing, or anything else.
       </Reveal>
       <Reveal delay={240} className="mt-10 space-y-4 text-lg">
         <a href="mailto:naturaltreasuresclothing@gmail.com" className="flex items-center gap-3 hover:text-primary transition-colors">
