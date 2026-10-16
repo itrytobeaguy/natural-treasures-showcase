@@ -1,3 +1,4 @@
+import { displayText } from "@/lib/display-text";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import useEmblaCarousel from "embla-carousel-react";
@@ -34,13 +35,13 @@ export function ProductCarousel({ images }: { images: CarouselImage[] }) {
         <div className="flex touch-pan-y">
           {images.map((image, index) => (
             <div key={`${image.id}-${image.image}`} className="carousel-slide min-w-0 shrink-0 border-r border-border" role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${images.length}`}>
-              <Button variant="ghost" aria-label={revealed === index ? `Open ${image.title}` : `Reveal ${image.title}`} aria-expanded={revealed === index} className="carousel-image relative block h-full w-full rounded-none p-0 whitespace-normal" onClick={() => {
+              <Button variant="ghost" aria-label={revealed === index ? `Open ${displayText(image.title)}` : `Reveal ${displayText(image.title)}`} aria-expanded={revealed === index} className="carousel-image relative block h-full w-full rounded-none p-0 whitespace-normal" onClick={() => {
                 if (revealed === index) navigate({ to: "/designs/$id", params: { id: image.id } });
                 else setRevealed(index);
               }}>
-                <img src={image.image} alt={image.title} loading={index < 3 ? "eager" : "lazy"} className="h-full w-full object-contain" />
+                <img src={image.image} alt={displayText(image.title)} loading={index < 3 ? "eager" : "lazy"} className="h-full w-full object-contain" />
                 {revealed === index && <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 bg-card/95 p-5 text-left text-card-foreground">
-                  <span className="min-w-0"><span className="product-title block text-lg">{image.title}</span>{image.collection && <span className="mt-1 block text-xs text-muted-foreground">{image.collection}</span>}</span>
+                  <span className="min-w-0"><span className="product-title block text-lg">{displayText(image.title)}</span>{image.collection && <span className="mt-1 block text-xs text-muted-foreground">{displayText(image.collection)}</span>}</span>
                   <ArrowUpRight aria-hidden="true" className="shrink-0" />
                 </span>}
               </Button>

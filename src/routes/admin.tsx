@@ -1,3 +1,4 @@
+import { displayText } from "@/lib/display-text";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -201,7 +202,7 @@ function AdminDashboard({ onSignOut, email }: { onSignOut: () => void; email: st
             <div key={o.id} className="rounded-xl border border-border bg-card p-5">
               <div className="flex justify-between items-start gap-4">
                 <div>
-                  <p className="font-medium">{o.customer_name} · <span className="text-muted-foreground font-normal">{o.designs?.title ?? "Not specified"}</span></p>
+                  <p className="font-medium">{o.customer_name} · <span className="text-muted-foreground font-normal">{displayText(o.designs?.title) || "Not specified"}</span></p>
                   <p className="text-sm text-muted-foreground mt-1">{o.customer_email} · Size {o.size}</p>
                   <p className="text-sm mt-2 whitespace-pre-wrap">{o.shipping_address}</p>
                   <p className="text-xs text-muted-foreground mt-2">{new Date(o.created_at).toLocaleString()}</p>
@@ -346,7 +347,7 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
   function visibilityControl(d: any) {
     return (
       <Button variant="outline" size="sm" disabled={visibilityPending.has(d.id)}
-        onClick={() => toggleVisibility(d)} aria-label={`${d.is_hidden ? "Show" : "Hide"} product: ${d.title}`}
+        onClick={() => toggleVisibility(d)} aria-label={`${d.is_hidden ? "Show" : "Hide"} product: ${displayText(d.title)}`}
         aria-pressed={Boolean(d.is_hidden)} title={d.is_hidden ? "Show in the shop" : "Hide from the shop"}>
         {d.is_hidden ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         {d.is_hidden ? "Show product" : "Hide product"}
@@ -448,10 +449,10 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
             <div key={d.id} className="rounded-xl border border-border bg-card p-4 flex flex-wrap gap-3 justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-lg overflow-hidden bg-secondary flex-shrink-0">
-                  {d.image_url ? <img src={d.image_url} alt={d.title} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
+                  {d.image_url ? <img src={d.image_url} alt={displayText(d.title)} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
                 </div>
                 <div>
-                  <p className="product-title font-medium">{d.title}</p>
+                  <p className="product-title font-medium">{displayText(d.title)}</p>
                   {d.is_hidden && <p className="text-xs text-muted-foreground">Hidden from shop</p>}
                   <p className="text-xs text-muted-foreground">${Number(d.price).toFixed(2)} · {d.category ?? "Not specified"} · {d.collection ?? "no collection"} · {d.in_stock ? "in stock" : "unavailable"}</p>
                 </div>
@@ -469,10 +470,10 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
           {filtered.map((d) => (
             <div key={d.id} className="rounded-xl border border-border bg-card overflow-hidden">
               <div className="aspect-square bg-secondary overflow-hidden">
-                {d.image_url ? <img src={d.image_url} alt={d.title} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
+                {d.image_url ? <img src={d.image_url} alt={displayText(d.title)} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
               </div>
               <div className="p-3">
-                <p className="product-title font-medium text-sm truncate">{d.title}</p>
+                <p className="product-title font-medium text-sm truncate">{displayText(d.title)}</p>
                 {d.is_hidden && <p className="text-xs text-muted-foreground">Hidden from shop</p>}
                 <p className="text-xs text-muted-foreground mt-0.5">${Number(d.price).toFixed(2)} · {d.category ?? "Not specified"}</p>
                 <p className="text-xs text-muted-foreground">{d.collection ?? "no collection"}</p>

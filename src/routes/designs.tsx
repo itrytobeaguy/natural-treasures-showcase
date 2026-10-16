@@ -1,3 +1,4 @@
+import { displayText } from "@/lib/display-text";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,7 +70,7 @@ function DesignsPage() {
       if (collection !== "All" && d.collection !== collection) return false;
       if (stock === "in" && !d.in_stock) return false;
       if (stock === "out" && d.in_stock) return false;
-      if (term && !`${d.title} ${d.category ?? ""} ${d.collection ?? ""}`.toLowerCase().includes(term)) return false;
+      if (term && !`${displayText(d.title)} ${d.category ?? ""} ${d.collection ?? ""}`.toLowerCase().includes(term)) return false;
       return true;
     });
     if (sort === "az") list = [...list].sort((a, b) => a.title.localeCompare(b.title));
@@ -177,7 +178,7 @@ function DesignsPage() {
                 {(d.image_url || d.image_urls?.[0]) ? (
                   <img
                     src={d.image_url || d.image_urls?.[0] || ""}
-                    alt={d.title}
+                    alt={displayText(d.title)}
                     className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                   />
                 ) : (
@@ -188,15 +189,15 @@ function DesignsPage() {
               </div>
               <div className="product-info mt-4 flex flex-1 flex-col">
                 <div>
-                  <h3 className="product-title line-clamp-2 text-lg">{d.title}</h3>
+                  <h3 className="product-title line-clamp-2 text-lg">{displayText(d.title)}</h3>
                   {d.category && (
                     <p className="text-xs uppercase tracking-widest text-muted-foreground mt-1">
-                      {d.category}
+                      {displayText(d.category)}
                     </p>
                   )}
                   {d.collection && (
                     <span className="mt-2 inline-block rounded-none border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] uppercase tracking-widest text-primary">
-                      {d.collection}
+                      {displayText(d.collection)}
                     </span>
                   )}
                 </div>

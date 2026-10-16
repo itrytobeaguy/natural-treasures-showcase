@@ -1,3 +1,4 @@
+import { displayText } from "@/lib/display-text";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -100,7 +101,7 @@ function DesignDetail() {
         <div>
           <div className="relative aspect-[4/5] rounded-none overflow-hidden bg-secondary border border-border group">
             {current ? (
-              <img src={current} alt={design.title} className="w-full h-full object-cover transition-opacity duration-300" />
+              <img src={current} alt={displayText(design.title)} className="w-full h-full object-cover transition-opacity duration-300" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                 <Leaf className="h-14 w-14 opacity-40" />
@@ -152,9 +153,9 @@ function DesignDetail() {
 
         <div>
           {design.category && (
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{design.category}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{displayText(design.category)}</p>
           )}
-          <h1 className="product-title text-4xl mt-2">{design.title}</h1>
+          <h1 className="product-title text-4xl mt-2">{displayText(design.title)}</h1>
           {hidePrices ? (
             <p className="mt-4 text-base text-muted-foreground italic">
               <HiddenPriceText />
@@ -163,7 +164,7 @@ function DesignDetail() {
             <p className="mt-4 text-2xl">${Number(design.price).toFixed(2)}</p>
           )}
           {design.description && (
-            <p className="mt-6 text-muted-foreground leading-relaxed">{design.description}</p>
+            <p className="mt-6 text-muted-foreground leading-relaxed">{displayText(design.description)}</p>
           )}
 
           <form onSubmit={submit} className="mt-10 space-y-4">

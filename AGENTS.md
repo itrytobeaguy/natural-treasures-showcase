@@ -16,3 +16,4 @@
 - Homepage product imagery uses Embla in ProductCarousel with client-randomized public images, first-click detail reveal and second-click product navigation; this preserves touch dragging and avoids custom carousel physics.
 - Public account UI is removed; admin authentication remains self-contained at /admin so shop management stays available.
 - Product grids use fixed-ratio media and flex-column metadata with a common minimum height so varying names and collection labels do not misalign cards.
+- Render saved catalog text through displayText for editorial punctuation consistency without mutating merchant records.

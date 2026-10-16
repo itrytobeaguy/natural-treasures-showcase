@@ -1,3 +1,4 @@
+import { displayText } from "@/lib/display-text";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Leaf, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -38,7 +39,7 @@ function Home() {
   const images = useMemo(() => {
     const pool = (designs ?? []).flatMap((design) => [...new Set([
       ...(design.image_url ? [design.image_url] : []), ...(design.image_urls ?? []),
-    ])].filter(Boolean).map((image) => ({ id: design.id, title: design.title, collection: design.collection, image })));
+    ])].filter(Boolean).map((image) => ({ id: design.id, title: displayText(design.title), collection: displayText(design.collection) || null, image })));
     for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -71,11 +72,11 @@ function Home() {
             return <Reveal key={design.id} delay={(i % 3) * 100} className="h-full">
               <Link to="/designs/$id" params={{ id: design.id }} className="product-card group flex h-full flex-col">
                 <div className="relative aspect-[4/5] shrink-0 overflow-hidden bg-secondary">
-                  {image ? <img src={image} alt={design.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center text-muted-foreground"><Leaf className="h-10 w-10" /></div>}
+                  {image ? <img src={image} alt={displayText(design.title)} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center text-muted-foreground"><Leaf className="h-10 w-10" /></div>}
                 </div>
                 <div className="product-info flex flex-1 flex-col border-t border-border pt-4">
-                  <h3 className="product-title line-clamp-2 text-lg">{design.title}</h3>
-                  <p className="mt-2 text-xs text-muted-foreground">{[design.category, design.collection].filter(Boolean).join(" · ") || "\u00a0"}</p>
+                  <h3 className="product-title line-clamp-2 text-lg">{displayText(design.title)}</h3>
+                  <p className="mt-2 text-xs text-muted-foreground">{[design.category, design.collection].filter(Boolean).map(displayText).join(" · ") || "\u00a0"}</p>
                   <p className="mt-auto pt-4 text-sm text-muted-foreground">{hidePrices ? <HiddenPriceText /> : `$${Number(design.price).toFixed(2)}`}</p>
                 </div>
               </Link>
