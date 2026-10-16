@@ -11,9 +11,9 @@ export const Route = createFileRoute("/designs_/$id")({
   component: DesignDetail,
   head: ({ params }) => ({
     meta: [
-      { title: `Design ${params.id} — Natural Treasures` },
+      { title: `Design ${params.id} | Natural Treasures` },
       { name: "description", content: "Take a closer look at this design and inquire about it." },
-      { property: "og:title", content: `Design ${params.id} — Natural Treasures` },
+      { property: "og:title", content: `Design ${params.id} | Natural Treasures` },
       { property: "og:description", content: "Explore this Natural Treasures piece, see its photos and send an inquiry." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -98,7 +98,7 @@ function DesignDetail() {
 
       <div className="grid md:grid-cols-2 gap-12">
         <div>
-          <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-secondary border border-border group">
+          <div className="relative aspect-[4/5] rounded-none overflow-hidden bg-secondary border border-border group">
             {current ? (
               <img src={current} alt={design.title} className="w-full h-full object-cover transition-opacity duration-300" />
             ) : (
@@ -141,7 +141,7 @@ function DesignDetail() {
                 <button
                   key={i}
                   onClick={() => setImgIdx(i)}
-                  className={`aspect-square rounded-lg overflow-hidden border transition-all ${i === imgIdx ? "border-primary ring-2 ring-primary/30" : "border-border opacity-70 hover:opacity-100"}`}
+                  className={`aspect-square rounded-none overflow-hidden border transition-all ${i === imgIdx ? "border-primary ring-2 ring-primary/30" : "border-border opacity-70 hover:opacity-100"}`}
                 >
                   <img src={src} alt="" className="w-full h-full object-cover" />
                 </button>
@@ -154,7 +154,7 @@ function DesignDetail() {
           {design.category && (
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{design.category}</p>
           )}
-          <h1 className="font-serif text-4xl mt-2">{design.title}</h1>
+          <h1 className="product-title text-4xl mt-2">{design.title}</h1>
           {hidePrices ? (
             <p className="mt-4 text-base text-muted-foreground italic">
               <HiddenPriceText />

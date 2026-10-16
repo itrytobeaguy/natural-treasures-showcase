@@ -12,10 +12,10 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
   head: () => ({
     meta: [
-      { title: "Admin — Natural Treasures" },
+      { title: "Admin · Natural Treasures" },
       { name: "description", content: "Admin dashboard." },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin — Natural Treasures" },
+      { property: "og:title", content: "Admin · Natural Treasures" },
       { property: "og:description", content: "Manage Natural Treasures products and inquiries." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -201,7 +201,7 @@ function AdminDashboard({ onSignOut, email }: { onSignOut: () => void; email: st
             <div key={o.id} className="rounded-xl border border-border bg-card p-5">
               <div className="flex justify-between items-start gap-4">
                 <div>
-                  <p className="font-medium">{o.customer_name} — <span className="text-muted-foreground font-normal">{o.designs?.title ?? "—"}</span></p>
+                  <p className="font-medium">{o.customer_name} · <span className="text-muted-foreground font-normal">{o.designs?.title ?? "Not specified"}</span></p>
                   <p className="text-sm text-muted-foreground mt-1">{o.customer_email} · Size {o.size}</p>
                   <p className="text-sm mt-2 whitespace-pre-wrap">{o.shipping_address}</p>
                   <p className="text-xs text-muted-foreground mt-2">{new Date(o.created_at).toLocaleString()}</p>
@@ -451,9 +451,9 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
                   {d.image_url ? <img src={d.image_url} alt={d.title} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
                 </div>
                 <div>
-                  <p className="font-medium">{d.title}</p>
+                  <p className="product-title font-medium">{d.title}</p>
                   {d.is_hidden && <p className="text-xs text-muted-foreground">Hidden from shop</p>}
-                  <p className="text-xs text-muted-foreground">${Number(d.price).toFixed(2)} · {d.category ?? "—"} · {d.collection ?? "no collection"} · {d.in_stock ? "in stock" : "unavailable"}</p>
+                  <p className="text-xs text-muted-foreground">${Number(d.price).toFixed(2)} · {d.category ?? "Not specified"} · {d.collection ?? "no collection"} · {d.in_stock ? "in stock" : "unavailable"}</p>
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -472,9 +472,9 @@ function DesignsAdmin({ designs, onChange }: { designs: any[]; onChange: () => v
                 {d.image_url ? <img src={d.image_url} alt={d.title} className="h-full w-full object-cover" /> : <div className="h-full w-full" />}
               </div>
               <div className="p-3">
-                <p className="font-medium text-sm truncate">{d.title}</p>
+                <p className="product-title font-medium text-sm truncate">{d.title}</p>
                 {d.is_hidden && <p className="text-xs text-muted-foreground">Hidden from shop</p>}
-                <p className="text-xs text-muted-foreground mt-0.5">${Number(d.price).toFixed(2)} · {d.category ?? "—"}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">${Number(d.price).toFixed(2)} · {d.category ?? "Not specified"}</p>
                 <p className="text-xs text-muted-foreground">{d.collection ?? "no collection"}</p>
                 <p className="text-xs text-muted-foreground">{d.in_stock ? "in stock" : "unavailable"}</p>
                 <div className="flex flex-wrap items-center gap-3 mt-2">
