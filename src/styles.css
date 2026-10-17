@@ -271,7 +271,7 @@
 }
 @media (max-width: 767px) {
   .wild-title { font-size: 72px; }
-  :root { --carousel-h: 300px; --carousel-h: min(300px, 40svh); }
+  :root { --carousel-h: 300px; }
   .carousel-slide { flex-basis: 75%; }
 }
 @media (max-width: 539px) {
