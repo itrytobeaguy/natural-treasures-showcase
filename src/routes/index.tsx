@@ -55,7 +55,7 @@ function Home() {
         <Reveal as="h1" variant="blur" className="nature-headline wild-title font-serif text-foreground">
           <span className="headline-line">Wear the Wild</span>
         </Reveal>
-        <Reveal delay={150} className="mt-1">
+        <Reveal delay={150} className="mt-0">
           <Button asChild variant="ghost" className="h-12 rounded-none px-6 text-base hover:bg-transparent hover:text-primary"><Link to="/designs">Explore the collection <ArrowUpRight /></Link></Button>
         </Reveal>
       </section>
