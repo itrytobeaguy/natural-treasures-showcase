@@ -74,7 +74,7 @@ function Home() {
                 <div className="relative aspect-[4/5] shrink-0 overflow-hidden bg-secondary">
                   {image ? <img src={image} alt={displayText(design.title)} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /> : <div className="flex h-full items-center justify-center text-muted-foreground"><Leaf className="h-10 w-10" /></div>}
                 </div>
-                <div className="product-info flex flex-1 flex-col border-t border-border pt-4">
+                <div className="product-info flex flex-1 flex-col pt-4">
                   <h3 className="product-title line-clamp-2 text-lg">{displayText(design.title)}</h3>
                   <p className="mt-2 text-xs text-muted-foreground">{[design.category, design.collection].filter(Boolean).map(displayText).join(" · ") || "\u00a0"}</p>
                   <p className="mt-auto pt-4 text-sm text-muted-foreground">{hidePrices ? <HiddenPriceText /> : `$${Number(design.price).toFixed(2)}`}</p>
