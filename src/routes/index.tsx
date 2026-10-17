@@ -51,7 +51,7 @@ function Home() {
     <div>
       {isLoading && <div className="carousel-loading animate-pulse bg-secondary" aria-label="Loading product images" />}
       <ProductCarousel images={images} />
-      <section className="wild-title-section flex flex-col items-center justify-center py-5 text-center sm:py-10 lg:py-16">
+      <section className="wild-title-section flex flex-col items-center justify-center py-4 text-center sm:py-10 lg:py-16">
         <Reveal as="h1" variant="blur" className="nature-headline wild-title font-serif text-foreground">
           <span className="headline-line">Wear the Wild</span>
         </Reveal>
