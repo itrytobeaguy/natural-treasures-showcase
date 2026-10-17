@@ -184,7 +184,7 @@ function SiteHeader() {
   }, []);
 
   return (
-    <header className="border-b border-border/60 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
+    <header className="border-b border-border/60 bg-background sticky top-0 z-40">
       <div className="mx-auto max-w-7xl px-5 py-4 flex flex-wrap gap-4 items-center justify-between">
         <Link to="/" aria-label="Natural Treasures | Home" className="flex items-center">
           <img src={logoAsset} alt="Natural Treasures" className="h-10 w-auto" />
