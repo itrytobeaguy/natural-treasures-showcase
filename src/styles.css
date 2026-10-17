@@ -244,7 +244,6 @@
 :root {
   --header-h: 73px;
   --carousel-h: 360px;
-  --carousel-h: min(360px, 40svh);
 }
 .product-carousel, .carousel-loading { height: var(--carousel-h); }
 .carousel-slide { flex-basis: 33.333333%; height: var(--carousel-h); }
