@@ -34,7 +34,7 @@ export function ProductCarousel({ images }: { images: CarouselImage[] }) {
       <div ref={viewport} className="overflow-hidden">
         <div className="flex touch-pan-y">
           {images.map((image, index) => (
-            <div key={`${image.id}-${image.image}`} className="carousel-slide min-w-0 shrink-0 border-r border-border" role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${images.length}`}>
+            <div key={`${image.id}-${image.image}`} className="carousel-slide min-w-0 shrink-0" role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${images.length}`}>
               <Button variant="ghost" aria-label={revealed === index ? `Open ${displayText(image.title)}` : `Reveal ${displayText(image.title)}`} aria-expanded={revealed === index} className="carousel-image relative block h-full w-full rounded-none p-0 whitespace-normal" onClick={() => {
                 if (revealed === index) navigate({ to: "/designs/$id", params: { id: image.id } });
                 else setRevealed(index);
