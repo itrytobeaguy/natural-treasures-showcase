@@ -251,6 +251,7 @@
 .wild-title-section {
   background: var(--title-surface);
   justify-content: center;
+  padding-block: 16px;
   min-height: calc(100vh - var(--header-h) - var(--carousel-h));
   min-height: calc(100svh - var(--header-h) - var(--carousel-h));
 }
