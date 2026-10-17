@@ -39,7 +39,7 @@ export function ProductCarousel({ images }: { images: CarouselImage[] }) {
                 if (revealed === index) navigate({ to: "/designs/$id", params: { id: image.id } });
                 else setRevealed(index);
               }}>
-                <img src={image.image} alt={displayText(image.title)} loading={index < 3 ? "eager" : "lazy"} className="h-full w-full object-contain" />
+                <img src={image.image} alt={displayText(image.title)} loading={index < 3 ? "eager" : "lazy"} className="h-full w-full object-cover" />
                 {revealed === index && <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 bg-card/95 p-5 text-left text-card-foreground">
                   <span className="min-w-0"><span className="product-title block text-lg">{displayText(image.title)}</span>{image.collection && <span className="mt-1 block text-xs text-muted-foreground">{displayText(image.collection)}</span>}</span>
                   <ArrowUpRight aria-hidden="true" className="shrink-0" />
